@@ -1,2 +1,2 @@
-# git-partb
-Practice Git (Part B) - Часть B
+# git-net-self-2016
+NET SELF 2016
