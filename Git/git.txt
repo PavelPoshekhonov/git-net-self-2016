@@ -1,0 +1,5 @@
+Practice Git (Part B)
+
+Часть A - Тренинг http://learngitbranching.js.org/
+learngitbranching-1.png
+learngitbranching-2.png
