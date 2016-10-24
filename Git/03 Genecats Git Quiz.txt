@@ -1,0 +1,65 @@
+Genecats Git Quiz
+
+- 1) Where can you go for git-related help and tips for UCSC Genome
+Browser development?
+
+- 2) What development model are we using with git currently?
+
+- 3) How have we secured access to the git shared repository?
+
++ 4) What command is used to create a git repo for your personal development?
+
++ 5) What command is used to fetch the latest updates by others?
+
++ 6) What command is used to publish your changes to the group?
+
++ 7) If you mess up really badly and push an entire messed up tree to the
+shared central
+git repository, what should you do?  Hopefully this will never happen,
+but you need to understand the danger and how to handle this emergency.
+
++ 8) CVS only tracks changes to single files.  What does Git do?
+
++ 9) Explain the relationship between the working directory,
+the index, the repository, and the shared-repository.
+
++ 10) What is 3a525393f6a5c47fa08d91ef16c16927ed3cd33a?  What are the
+benefits of this?
+
+- 11) How can a Git merge fail? What do you do?
+
++ 12) Where does Git keep track of what version you have checked out?
+
+- 13) How does Git know when you copy in a new version over an old one?
+
++ 14) How do you rename a file in Git?
+
++ 15) What command is used to view the history of commits to a file or
+directory?
+
+- 16) What command is used to see line-by-line who changed a file?
+
++ 17) What command is used to show differences between commits or branches?
+
+- 18) If you refactor, i.e. move a block of lines from one file to another,
+why must both the removal from one file and the addition to another file
+be committed in a single commit together?  Does this apply for
+entire files renamed?
+
++ 19) What git command is used to undo changes made to your local repo?
+What are the variations and how do they work?
+
++ 20) Why is it very important not to modify the shared history in the git
+shared repository?
+
++ 21) How can you temporarily save changes before pulling/merging or
+switching branches?
+
+- 22) What happens to changes to a tracked file that are not committed,
+when you checkout another branch?
+
+- 23) How can you examine a different version of a file that you haven't
+checked out?
+
++ 24) How can you safely create a project with multiple git repo dependencies?
+

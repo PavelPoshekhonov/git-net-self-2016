@@ -1,5 +1,16 @@
-Practice Git (Part B)
+﻿Practice Git (Part B)
 
 Часть A - Тренинг http://learngitbranching.js.org/
 learngitbranching-1.png
 learngitbranching-2.png
+
+
+Questions Git
+
+01 Phil's Git Quiz - Results.png
+01 Phil's Git Quiz - Answers.png
+02 Git Github Learn Quiz.png
+03 Genecats Git Quiz.txt
+04 Learn Git - Init, Status, Add, Commit.png
+05 Learn Git - Branch, Checkout, Merge.png
+06 Learn Git - Rebasing.png
