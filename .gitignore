@@ -1,5 +1,5 @@
-/.vs/
+.vs/
 *.suo
-/bin/
-/obj/
-/TestResults/
+bin/
+obj/
+TestResults/
