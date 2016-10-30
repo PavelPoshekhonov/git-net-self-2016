@@ -66,16 +66,25 @@ namespace CalculateBonus
         }
 
         decimal bonus;
-        public decimal Bonus { get; }                   // Премия
+        public decimal Bonus                            // Премия
+        {
+            get {return bonus; }
+        }                  
 
         int taxRate;
-        public int TaxRate { get; }                     // Ставка налога                       
+        public int TaxRate                              // Ставка налога    
+        {
+            get { return taxRate; }
+        }                                        
 
         bool taxTaken;
-        public bool TaxTaken { get; }                   // Признак снятия налога
+        public bool TaxTaken                            // Признак снятия налога
+        {
+            get { return taxTaken; }
+        }                   
 
         // Конструктор
-        public Worker(string sn, Ranks rk, Departments dp, int sl = 500, byte sp = 10, double kf = 0.90)
+        public Worker(string sn, Ranks rk, Departments dp, int sl, byte sp, double kf)
         {
             // Фамилия, Должность, Отдел
             SurName = sn;
@@ -136,6 +145,52 @@ namespace CalculateBonus
 
         static int Main(string[] args)
         {
+            string surName = "";
+            Ranks rank = 0;
+            Departments department = 0;
+            int salary = 500;
+            byte salaryProcent = 10;
+            double koef = 0.90;
+
+            // Разбор аргументов командной строки
+            if (args.Length == 0)
+                return (int)ReturnCodes.NoArg;
+
+            if (args.Length >= 1)   // Код сотрудника и фамилия
+            {
+                try
+                {
+                    if (Enum.TryParse((args[0][0]).ToString(), out department) == false)
+                        return (int)ReturnCodes.WrongDep;
+                    if (Enum.TryParse((args[0][1]).ToString(), out rank) == false)
+                        return (int)ReturnCodes.WrongRank;
+                    surName = args[0].Substring(3);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    Console.WriteLine("Неверный формат ввода аргумента кода и фамилии сотрудника!");
+                    return (int)ReturnCodes.NoArg;
+                }
+
+            }
+
+            if (args.Length >= 2)   // Зарплата
+                int.TryParse(args[1], out salary);
+
+            if (args.Length >= 3)   // Процент от зарплаты, на выплату премии
+                byte.TryParse(args[2], out salaryProcent);
+
+            if (args.Length >= 4)   // Поправочный коэффициент
+            {
+                char DecSep = Convert.ToChar(System.Globalization.NumberFormatInfo.CurrentInfo.CurrencyDecimalSeparator);
+                string tempStr = args[3].Replace('.', DecSep).Replace(',', DecSep);
+                double.TryParse(tempStr, out koef);
+            }
+
+            // Создрание экземпляра класса и вывод результатов
+            Worker Worker1 = new Worker(surName, rank, department, salary, salaryProcent, koef);
+            Worker1.FormatWrite();
+
             return (int)ReturnCodes.AllOK;
         }
     }
