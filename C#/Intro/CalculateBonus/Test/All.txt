@@ -1,0 +1,34 @@
+
+D:\WORK_EPAM\GIT\git-net-self-2016\C#\Intro\CalculateBonus\BatFiles>CalculateBonus.exe 12,Сидоров 650 10 0.90 
+Сотрудник: СИДОРОВ
+Должность: Manager
+Отдел: QA
+Премия: 50,895
+Включая налог: 13 %
+Код завершения программы: 0 Премия успешно начислена
+
+D:\WORK_EPAM\GIT\git-net-self-2016\C#\Intro\CalculateBonus\BatFiles>CalculateBonus.exe 01,Петров 
+Сотрудник: ПЕТРОВ
+Должность: Lead
+Отдел: RD
+Премия: 39,15
+Включая налог: 13 %
+Код завершения программы: 0 Премия успешно начислена
+
+D:\WORK_EPAM\GIT\git-net-self-2016\C#\Intro\CalculateBonus\BatFiles>CalculateBonus.exe 43,Иванов 300 5 0.30 
+Сотрудник: ИВАНОВ
+Должность: Director
+Отдел: Marketing
+Премия: 4,5
+Не включая налог: 13 %
+Код завершения программы: 0 Премия успешно начислена
+
+D:\WORK_EPAM\GIT\git-net-self-2016\C#\Intro\CalculateBonus\BatFiles>CalculateBonus.exe 92,Петров 
+Код завершения программы: -2 Указаный департамент не существует       
+
+D:\WORK_EPAM\GIT\git-net-self-2016\C#\Intro\CalculateBonus\BatFiles>CalculateBonus.exe 28,Петров 
+Код завершения программы: -3 Указанная должность не существует        
+
+D:\WORK_EPAM\GIT\git-net-self-2016\C#\Intro\CalculateBonus\BatFiles>CalculateBonus.exe 11 
+ArgumentOutOfRangeException: Неверный формат ввода аргумента кода и фамилии сотрудника!
+Код завершения программы: -1 Не был передан обязательный (0й) аргумент
