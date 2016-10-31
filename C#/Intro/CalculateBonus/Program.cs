@@ -29,7 +29,7 @@ namespace CalculateBonus
         Employee = 0,   // Сотрудник
         Lead = 1,       // Ведущий сотрудник
         Manager = 2,    // Руководитель
-        Director =3     // Директор
+        Director = 3    // Директор
     }
 
     // Класс Работник
@@ -126,9 +126,9 @@ namespace CalculateBonus
             Console.WriteLine("Отдел: {0}",     Department.ToString());
             Console.WriteLine("Премия: {0}",    Bonus.ToString());
             if (TaxTaken)
-                Console.WriteLine("Включая налог: {0}",     TaxRate.ToString());
+                Console.WriteLine("Включая налог: {0} %",     TaxRate.ToString());
             else
-                Console.WriteLine("Не включая налог: {0}",  TaxRate.ToString());
+                Console.WriteLine("Не включая налог: {0} %",  TaxRate.ToString());
         }
     }
 
@@ -162,13 +162,26 @@ namespace CalculateBonus
                 {
                     if (Enum.TryParse((args[0][0]).ToString(), out department) == false)
                         return (int)ReturnCodes.WrongDep;
+                    else
+                        if (Enum.IsDefined(typeof(Departments), department) == false)
+                            return (int)ReturnCodes.WrongDep;
+
                     if (Enum.TryParse((args[0][1]).ToString(), out rank) == false)
                         return (int)ReturnCodes.WrongRank;
+                    else
+                        if (Enum.IsDefined(typeof(Ranks), rank) == false)
+                            return (int)ReturnCodes.WrongRank;
+
                     surName = args[0].Substring(3);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    Console.WriteLine("Неверный формат ввода аргумента кода и фамилии сотрудника!");
+                    Console.WriteLine("IndexOutOfRangeException: Неверный формат ввода аргумента кода и фамилии сотрудника!");
+                    return (int)ReturnCodes.NoArg;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("ArgumentOutOfRangeException: Неверный формат ввода аргумента кода и фамилии сотрудника!");
                     return (int)ReturnCodes.NoArg;
                 }
 
@@ -182,6 +195,7 @@ namespace CalculateBonus
 
             if (args.Length >= 4)   // Поправочный коэффициент
             {
+                // Разделитель десятичных разрядов
                 char DecSep = Convert.ToChar(System.Globalization.NumberFormatInfo.CurrentInfo.CurrencyDecimalSeparator);
                 string tempStr = args[3].Replace('.', DecSep).Replace(',', DecSep);
                 double.TryParse(tempStr, out koef);
