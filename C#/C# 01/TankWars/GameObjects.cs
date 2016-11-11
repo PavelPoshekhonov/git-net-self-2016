@@ -13,47 +13,57 @@ namespace TankWars
     // Базовый класс для игровых объектов: Яблоко, Колобок, Танк, Пуля
     public class GameObject
     {
-        Rectangle position;
-        public Rectangle Position       // Текущее положение объекта
-        {
-            get { return position; }
-            set
-            {
-                OldPosition = Position;
-                position = value;
-                LastMoving = DateTime.Now;
-                // Инициировать перерисовку
-            }
-        }
     }
 
     // Базовый класс для игровых объектов: Колобок, Танк, Пуля
     public class MovingObject : GameObject
     {
-        Rectangle position;
-        public Rectangle Position       // Текущее положение объекта
+        // События
+        public event EventHandler LocationChanged;
+        protected virtual void OnLocationChanged(EventArgs e)
         {
-            get { return position; }
+            LocationChanged?.Invoke(this, e);
+        }
+
+        // Поля
+        Size objectSize;
+        public Size ObjectSize
+        {
+            get { return objectSize; }
+        }
+
+        Point location;
+        public Point Location
+        {
+            get { return location; }
             set
             {
-                OldPosition = Position;
-                position = value;
+                OldLocation = location;
+                location = value;
                 LastMoving = DateTime.Now;
-                // Инициировать перерисовку
+
+                // Вызов события отрисовки
+                OnLocationChanged(EventArgs.Empty);
             }
         }
-        public Rectangle OldPosition;       // Предыдущее положение объекта
-        public DateTime LastMoving;         // Время последнего перемещения
-        public int MovementDelay;           // Определяет как часто происходит перемещение объекта, мсек
-        public Direction direction;
+        public Point OldLocation { get; set; }          // Предыдущее положение объекта
+        public DateTime LastMoving { get; set; }        // Время последнего перемещения
+        public int MovementDelay { get; set; }          // Определяет как часто происходит перемещение объекта, мсек
+        public Direction Course { get; set; }           // Направление
 
-        public MovingObject()
+        // Конструктор
+        public MovingObject(Rectangle pos, int mDelay, Direction cs = Direction.Bottom)
         {
-            // Выбрать свое место на игровом поле
-            // Задать position
+            MovementDelay = mDelay;
+            Course = cs;
+
+            objectSize = pos.Size;
+            location = pos.Location; // Попадет в OldPosition
+            Location = location = pos.Location;
         }
     }
 
+/*
     // Колобок
     public class Kolobok : MovingObject
     {
@@ -63,6 +73,6 @@ namespace TankWars
     public class Tank : MovingObject
     {
     }
-
+*/
 }
 

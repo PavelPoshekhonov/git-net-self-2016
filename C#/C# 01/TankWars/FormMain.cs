@@ -15,6 +15,9 @@ namespace TankWars
         public FormMain()
         {
             InitializeComponent();
+
+            PackmanController GameController = new PackmanController(this, 0, 200);
+            GameController.Play();
         }
     }
 }
