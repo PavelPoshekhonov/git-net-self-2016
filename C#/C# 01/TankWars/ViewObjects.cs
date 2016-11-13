@@ -31,9 +31,13 @@ namespace TankWars
             Point oldLocation = ((MovingObject)sender).OldLocation;
 
             PictureBox objectBox = new PictureBox();
-
             objectBox.Size = objectSize;
-            Canvas.Controls. Add(objectBox);
+            objectBox.Location = location;
+
+//            objectBox.
+
+
+            Canvas.Controls.Add(objectBox);
 
             Bitmap kolobok = new Bitmap(200, 100);
             Graphics kolobokGraphics = Graphics.FromImage(kolobok);

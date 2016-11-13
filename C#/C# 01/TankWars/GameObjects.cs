@@ -63,16 +63,25 @@ namespace TankWars
         }
     }
 
-/*
+
     // Колобок
     public class Kolobok : MovingObject
     {
+        public int LifesLeft { get; set; }              // Оставшиеся жизни
+
+        // Конструктор
+        public Kolobok(Rectangle pos, int mDelay, Direction cs = Direction.Bottom) : base(pos, mDelay, cs)
+        {
+        }
     }
 
     // Танк
     public class Tank : MovingObject
     {
+        // Конструктор
+        public Tank(Rectangle pos, int mDelay, Direction cs = Direction.Bottom) : base(pos, mDelay, cs)
+        {
+        }
     }
-*/
 }
 

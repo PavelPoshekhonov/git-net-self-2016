@@ -18,7 +18,7 @@ namespace TankWars
         // Отображение объектов
         public KolobokView KolobokViewer;
 
-
+        // Конструктор
         public PackmanController(Control canvas, int tankAmount, int mDelay)
         {
             KolobokViewer = new KolobokView(canvas);
@@ -29,12 +29,19 @@ namespace TankWars
 
         }
 
+        // Деструктор
+        public void Dispose()
+        {
+            Kolobok.LocationChanged -= KolobokViewer.kolobok_LocationChanged;
+        }
+
         public void Play()
         {
             for (int i = 0; i < 9; i++)
             {
-                Thread.Sleep(200);
+                Thread.Sleep(50);
                 Kolobok.Location = new Point(Kolobok.Location.X, Kolobok.Location.Y + 5);
+                
             }
         }
     }
