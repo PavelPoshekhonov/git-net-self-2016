@@ -12,7 +12,8 @@ namespace TankWars
     // Направление движения
     public enum Direction { Left, Right, Top, Bottom }
 
-    // Класс статического игрового объекта: Яблоко
+
+    // Базовый класс статического игрового объекта
     public class GameObject
     {
         // События
@@ -50,6 +51,17 @@ namespace TankWars
         }
     }
 
+    // Класс статического игрового объекта: Яблоко
+    public class Apple : GameObject
+    {
+        public static int GiveScore = 1;                // Сколько дает очков колобку
+
+        // Конструктор
+        public Apple(Point pos, Size siz) : base(pos, siz) { }
+    }
+
+
+
     // Базовый класс двигающегося игрового объекта
     public class MovingObject : GameObject
     {
@@ -86,31 +98,27 @@ namespace TankWars
     public class Kolobok : MovingObject
     {
         public int LifesLeft { get; set; } = 3;         // Оставшиеся жизни
-        public int Apples { get; set; } = 0;            // Собранные яблоки
+        public int ApplesCollected { get; set; } = 0;   // Собранные яблоки
         public int TanksKilled { get; set; } = 0;       // Подбитые танки
 
         // Конструктор
-        public Kolobok(Point pos, Size siz, int del, Direction dir = Direction.Bottom) : base(pos, siz, dir)
-        {
-        }
+        public Kolobok(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir) { }
     }
 
     // Класс двигающегося игрового объекта: Танк
     public class Tank : MovingObject
     {
+        public static int GiveScore = 1;                // Сколько дает очков колобку
+
         // Конструктор
-        public Tank(Point pos, Size siz, int del, Direction dir = Direction.Bottom) : base(pos, siz, dir)
-        {
-        }
+        public Tank(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir) { }
     }
 
     // Класс двигающегося игрового объекта: Пуля
     public class Bullet : MovingObject
     {
         // Конструктор
-        public Bullet(Point pos, Size siz, int del, Direction dir = Direction.Bottom) : base(pos, siz, dir)
-        {
-        }
+        public Bullet(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir) { }
     }
 }
 

@@ -46,7 +46,8 @@ namespace TankWars
         {
             // Уничтожить контроллер игры (если он есть) и создать его заново
             this.GameController?.Dispose();
-            PackmanController GameController = new PackmanController(pnMap, 0, 200);
+            PackmanController GameController = new PackmanController(pnMap, 5, 5, 200);
+            // Запустить игру
             GameController.Play();
         }
 
