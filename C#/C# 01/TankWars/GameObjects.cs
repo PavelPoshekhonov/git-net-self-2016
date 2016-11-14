@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿////////////////////////////////////////////////////////////
+// MVC. Бизнес уровень
+// Классы сущностей игровых объектов:
+// Яблоко, Колобок, Танк, Пуля
+////////////////////////////////////////////////////////////
+
+using System;
 using System.Drawing;
 
 namespace TankWars
@@ -10,76 +12,103 @@ namespace TankWars
     // Направление движения
     public enum Direction { Left, Right, Top, Bottom }
 
-    // Базовый класс для игровых объектов: Яблоко, Колобок, Танк, Пуля
+    // Класс статического игрового объекта: Яблоко
     public class GameObject
     {
-    }
-
-    // Базовый класс для игровых объектов: Колобок, Танк, Пуля
-    public class MovingObject : GameObject
-    {
         // События
-        public event EventHandler LocationChanged;
+        public event EventHandler LocationChanged;      // Изменение положения
         protected virtual void OnLocationChanged(EventArgs e)
         {
             LocationChanged?.Invoke(this, e);
         }
 
         // Поля
-        Size objectSize;
-        public Size ObjectSize
+        Size size;
+        public Size Size                                // Размер объекта
         {
-            get { return objectSize; }
+            get { return size; }
         }
 
         Point location;
-        public Point Location
+        public Point Location                           // Положение объекта
         {
             get { return location; }
             set
             {
-                OldLocation = location;
                 location = value;
-                LastMoving = DateTime.Now;
 
                 // Вызов события отрисовки
                 OnLocationChanged(EventArgs.Empty);
             }
         }
-        public Point OldLocation { get; set; }          // Предыдущее положение объекта
-        public DateTime LastMoving { get; set; }        // Время последнего перемещения
-        public int MovementDelay { get; set; }          // Определяет как часто происходит перемещение объекта, мсек
-        public Direction Course { get; set; }           // Направление
 
         // Конструктор
-        public MovingObject(Rectangle pos, int mDelay, Direction cs = Direction.Bottom)
+        public GameObject(Point pos, Size siz)
         {
-            MovementDelay = mDelay;
-            Course = cs;
+            size = siz;
+            Location = pos;
+        }
+    }
 
-            objectSize = pos.Size;
-            location = pos.Location; // Попадет в OldPosition
-            Location = location = pos.Location;
+    // Базовый класс двигающегося игрового объекта
+    public class MovingObject : GameObject
+    {
+        // События
+        public event EventHandler DirectionChanged;     // Изменение направления
+        protected virtual void OnDirectionChanged(EventArgs e)
+        {
+            DirectionChanged?.Invoke(this, e);
+        }
+
+        // Поля
+        public Direction direction;
+        public Direction Direction                      // Направление
+        {
+            get { return direction; }
+            set
+            {
+                direction = value;
+
+                // Вызов события отрисовки
+                OnDirectionChanged(EventArgs.Empty);
+            }
+        }
+
+        // Конструктор
+        public MovingObject(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz)
+        {
+            Direction = dir;
         }
     }
 
 
-    // Колобок
+    // Класс двигающегося игрового объекта: Колобок
     public class Kolobok : MovingObject
     {
-        public int LifesLeft { get; set; }              // Оставшиеся жизни
+        public int LifesLeft { get; set; } = 3;         // Оставшиеся жизни
+        public int Apples { get; set; } = 0;            // Собранные яблоки
+        public int TanksKilled { get; set; } = 0;       // Подбитые танки
 
         // Конструктор
-        public Kolobok(Rectangle pos, int mDelay, Direction cs = Direction.Bottom) : base(pos, mDelay, cs)
+        public Kolobok(Point pos, Size siz, int del, Direction dir = Direction.Bottom) : base(pos, siz, dir)
         {
         }
     }
 
-    // Танк
+    // Класс двигающегося игрового объекта: Танк
     public class Tank : MovingObject
     {
         // Конструктор
-        public Tank(Rectangle pos, int mDelay, Direction cs = Direction.Bottom) : base(pos, mDelay, cs)
+        public Tank(Point pos, Size siz, int del, Direction dir = Direction.Bottom) : base(pos, siz, dir)
+        {
+        }
+    }
+
+    // Класс двигающегося игрового объекта: Пуля
+    public class Bullet : MovingObject
+    {
+        // Конструктор
+        public Bullet(Point pos, Size siz, int del, Direction dir = Direction.Bottom) : base(pos, siz, dir)
         {
         }
     }

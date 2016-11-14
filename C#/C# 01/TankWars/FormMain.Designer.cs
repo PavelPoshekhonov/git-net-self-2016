@@ -30,13 +30,13 @@
         {
             this.pnMap = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbTanks = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.btNewGame = new System.Windows.Forms.Button();
             this.lbApples = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.lbLifes = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btNewGame = new System.Windows.Forms.Button();
-            this.lbTanks = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,6 +62,34 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(500, 31);
             this.panel1.TabIndex = 1;
+            // 
+            // lbTanks
+            // 
+            this.lbTanks.AutoSize = true;
+            this.lbTanks.Location = new System.Drawing.Point(353, 8);
+            this.lbTanks.Name = "lbTanks";
+            this.lbTanks.Size = new System.Drawing.Size(22, 13);
+            this.lbTanks.TabIndex = 7;
+            this.lbTanks.Text = "_ _";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(310, 8);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(37, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Tanks";
+            // 
+            // btNewGame
+            // 
+            this.btNewGame.Location = new System.Drawing.Point(3, 3);
+            this.btNewGame.Name = "btNewGame";
+            this.btNewGame.Size = new System.Drawing.Size(75, 23);
+            this.btNewGame.TabIndex = 5;
+            this.btNewGame.Text = "New Game";
+            this.btNewGame.UseVisualStyleBackColor = true;
+            this.btNewGame.Click += new System.EventHandler(this.btNewGame_Click);
             // 
             // lbApples
             // 
@@ -99,34 +127,6 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Lifes";
             // 
-            // btNewGame
-            // 
-            this.btNewGame.Location = new System.Drawing.Point(3, 3);
-            this.btNewGame.Name = "btNewGame";
-            this.btNewGame.Size = new System.Drawing.Size(75, 23);
-            this.btNewGame.TabIndex = 5;
-            this.btNewGame.Text = "New Game";
-            this.btNewGame.UseVisualStyleBackColor = true;
-            this.btNewGame.Click += new System.EventHandler(this.btNewGame_Click);
-            // 
-            // lbTanks
-            // 
-            this.lbTanks.AutoSize = true;
-            this.lbTanks.Location = new System.Drawing.Point(353, 8);
-            this.lbTanks.Name = "lbTanks";
-            this.lbTanks.Size = new System.Drawing.Size(22, 13);
-            this.lbTanks.TabIndex = 7;
-            this.lbTanks.Text = "_ _";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(310, 8);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(37, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Tanks";
-            // 
             // FormMain
             // 
             this.ClientSize = new System.Drawing.Size(524, 571);
@@ -137,6 +137,7 @@
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Tank Wars";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormMain_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
