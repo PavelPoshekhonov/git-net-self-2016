@@ -73,7 +73,7 @@ namespace TankWars
         }
 
         // Поля
-        public Direction direction;
+        Direction direction;
         public Direction Direction                      // Направление
         {
             get { return direction; }

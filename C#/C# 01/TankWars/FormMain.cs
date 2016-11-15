@@ -12,41 +12,26 @@ namespace TankWars
 {
     public partial class FormMain : Form
     {
-        protected PictureBox picBox = new PictureBox();
-
         public PackmanController GameController;
 
         public FormMain(string[] args)
         {
             InitializeComponent();
-
-            // Test
-            // Нарисуем picBox
-            picBox.Height = 25;
-            picBox.Width = 25;
-            picBox.Location = new Point(50, 50);
-
-            Bitmap kolobok = new Bitmap(25, 25);
-            Graphics kolobokGraphics = Graphics.FromImage(kolobok);
-            int yellow = 0;
-            int white = 11;
-            while (white <= 25)
-            {
-                kolobokGraphics.FillRectangle(Brushes.Yellow, 0, yellow, 25, 5);
-                kolobokGraphics.FillRectangle(Brushes.White, 0, white, 25, 5);
-                yellow += 5;
-                white += 5;
-            }
-            picBox.Image = kolobok;
-
-            pnMap.Controls.Add(picBox);
         }
 
         private void btNewGame_Click(object sender, EventArgs e)
         {
-            // Уничтожить контроллер игры (если он есть) и создать его заново
-            this.GameController?.Dispose();
+            // Уничтожить контроллер игры (если он есть)
+            if (this.GameController != null)
+            {
+                KeyDown -= this.GameController.KeyDown;
+                ((IDisposable)this.GameController).Dispose();
+            }
+
+            // Создать контроллер игры
             PackmanController GameController = new PackmanController(pnMap, 5, 5, 200);
+            KeyDown += GameController.KeyDown; // Обработчик события нажатия на кнопку
+
             // Запустить игру
             GameController.Play();
         }
@@ -85,35 +70,6 @@ namespace TankWars
                     else
                     {
                     }
-                    break;
-            }
-        }
-
-        private void FormMain_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Up:
-                    {
-                        picBox.Location = new Point(picBox.Location.X, picBox.Location.Y - 1);
-                        break;
-                    }
-                case Keys.Down:
-                    {
-                        picBox.Location = new Point(picBox.Location.X, picBox.Location.Y + 1);
-                        break;
-                    }
-                case Keys.Left:
-                    {
-                        picBox.Location = new Point(picBox.Location.X - 1, picBox.Location.Y);
-                        break;
-                    }
-                case Keys.Right:
-                    {
-                        picBox.Location = new Point(picBox.Location.X + 1, picBox.Location.Y);
-                        break;
-                    }
-                default:
                     break;
             }
         }

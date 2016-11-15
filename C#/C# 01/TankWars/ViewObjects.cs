@@ -7,11 +7,12 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TankWars.Properties;
 
 namespace TankWars
 {
     // Базовый класс отображения статического игрового объекта
-    public class GameObjectView
+    public abstract class GameObjectView
     {
         protected Control Canvas { get; set; }              // Окно для рисования
         protected PictureBox objectBox = new PictureBox();  // Область для отображения объекта
@@ -20,13 +21,16 @@ namespace TankWars
         public GameObjectView(Control canvas)
         {
             Canvas = canvas;
+            Canvas.Controls.Add(objectBox); // Привязать картинку к игровой области
+            objectBox.SizeMode = PictureBoxSizeMode.AutoSize;
         }
 
         // Установить обработчик события "Изменение положения"
         public void SetLocationChangedHandler(GameObject obj)
         {
             obj.LocationChanged += object_LocationChanged;
-            ShowObject(obj); // Отобразить объект сразу при назначении обработчика
+            SelectImage(obj); // Выбрать картинку объекта
+            MoveObject(obj);  // Переместить объект сразу при назначении обработчика
         }
 
         // Очистить обработчик события "Изменение положения"
@@ -39,11 +43,17 @@ namespace TankWars
         public void object_LocationChanged(object sender, EventArgs e)
         {
             if ((sender is GameObject) == false) return;
-            ShowObject(sender);
+            MoveObject((GameObject)sender); // Переместить объект
         }
 
-        public void ShowObject(object sender)
-        { }
+        // Выбрать картинку объекта (загрузить картинку в PictureBox)
+        public abstract void SelectImage(GameObject obj);
+
+        // Переместить объект
+        public void MoveObject(GameObject obj)
+        {
+            objectBox.Location = obj.Location;
+        }
     }
 
     // Класс отображения статического игрового объекта: Яблоко
@@ -51,19 +61,40 @@ namespace TankWars
     {
         // Конструктор
         public AppleView(Control canvas) : base(canvas) { }
+
+        // Выбрать картинку объекта (загрузить картинку в PictureBox)
+        override public void SelectImage(GameObject obj)
+        {
+            objectBox.Image = Resources.Apple;
+        }
     }
 
 
 
     // Базовый класс отображения двигающегося игрового объекта
-    public class MovingObjectView : GameObjectView
+    public abstract class MovingObjectView : GameObjectView
     {
         // Конструктор
         public MovingObjectView(Control canvas) : base(canvas) { }
 
+        // Установить обработчик события "Изменение направления"
+        public void SetDirectionChangedHandler(MovingObject obj)
+        {
+            obj.DirectionChanged += object_DirectionChanged;
+            SelectImage(obj); // Выбрать картинку объекта
+        }
+
+        // Очистить обработчик события "Изменение направления"
+        public void UnSetDirectionChangedHandler(MovingObject obj)
+        {
+            obj.DirectionChanged -= object_DirectionChanged;
+        }
+
+        // Обработчик события "Изменение направления"
         public void object_DirectionChanged(object sender, EventArgs e)
         {
-            if ((sender is GameObject) == false) return;
+            if ((sender is MovingObject) == false) return;
+            SelectImage((MovingObject)sender);
         }
     }
 
@@ -73,27 +104,32 @@ namespace TankWars
         // Конструктор
         public KolobokView(Control canvas) : base(canvas) { }
 
-        public void kolobok_LocationChanged(object sender, EventArgs e)
+        // Выбрать картинку объекта (загрузить картинку в PictureBox)
+        override public void SelectImage(GameObject obj)
         {
-            if ((sender is MovingObject) == false) return;
-
-            objectBox.Size = ((MovingObject)sender).Size;
-            objectBox.Location = ((MovingObject)sender).Location; 
-
-            Canvas.Controls.Add(objectBox);
-
-            Bitmap kolobok = new Bitmap(200, 100);
-            Graphics kolobokGraphics = Graphics.FromImage(kolobok);
-            int yellow = 0;
-            int white = 11;
-            while (white <= 100)
+            switch ((obj as MovingObject).Direction)
             {
-                kolobokGraphics.FillRectangle(Brushes.Yellow, 20, yellow, 200, 10);
-                kolobokGraphics.FillRectangle(Brushes.White, 20, white, 200, 10);
-                yellow += 20;
-                white += 20;
+                case Direction.Left:
+                    {
+                        objectBox.Image = Resources.Kolobok_L;
+                        break;
+                    }
+                case Direction.Right:
+                    {
+                        objectBox.Image = Resources.Kolobok_R;
+                        break;
+                    }
+                case Direction.Top:
+                    {
+                        objectBox.Image = Resources.Kolobok_T;
+                        break;
+                    }
+                default:
+                    {
+                        objectBox.Image = Resources.Kolobok_B;
+                        break;
+                    }
             }
-            objectBox.Image = kolobok;
         }
     }
 
@@ -102,6 +138,34 @@ namespace TankWars
     {
         // Конструктор
         public TankView(Control canvas) : base(canvas) { }
+
+        // Выбрать картинку объекта (загрузить картинку в PictureBox)
+        override public void SelectImage(GameObject obj)
+        {
+            switch ((obj as MovingObject).Direction)
+            {
+                case Direction.Left:
+                    {
+                        objectBox.Image = Resources.Tank_L;
+                        break;
+                    }
+                case Direction.Right:
+                    {
+                        objectBox.Image = Resources.Tank_R;
+                        break;
+                    }
+                case Direction.Top:
+                    {
+                        objectBox.Image = Resources.Tank_T;
+                        break;
+                    }
+                default:
+                    {
+                        objectBox.Image = Resources.Tank_B;
+                        break;
+                    }
+            }
+        }
     }
 
     // Класс отображения двигающегося игрового объекта: Пуля
@@ -109,6 +173,9 @@ namespace TankWars
     {
         // Конструктор
         public BulletView(Control canvas) : base(canvas) { }
+
+        // Выбрать картинку объекта (загрузить картинку в PictureBox)
+        override public void SelectImage(GameObject obj) { }
     }
 
 }
