@@ -121,4 +121,3 @@ namespace TankWars
         public Bullet(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir) { }
     }
 }
-

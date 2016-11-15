@@ -29,50 +29,37 @@ namespace TankWars
             }
 
             // Создать контроллер игры
-            PackmanController GameController = new PackmanController(pnMap, 5, 5, 200);
+            GameController = new PackmanController(pnMap, 5, 5, 1);
             KeyDown += GameController.KeyDown; // Обработчик события нажатия на кнопку
 
             // Запустить игру
             GameController.Play();
         }
 
-        // Вспомогательные функции для реакции на нажатие стрелок
-        protected override bool IsInputKey(Keys keyData)
+        private void btPause_Click(object sender, EventArgs e)
         {
-            switch (keyData)
+            if (GameController.GameRunning == true)
             {
-                case Keys.Right:
-                case Keys.Left:
-                case Keys.Up:
-                case Keys.Down:
-                    return true;
-                case Keys.Shift | Keys.Right:
-                case Keys.Shift | Keys.Left:
-                case Keys.Shift | Keys.Up:
-                case Keys.Shift | Keys.Down:
-                    return true;
+                GameController.Pause();
             }
-            return base.IsInputKey(keyData);
+            else
+            {
+                GameController.Play();
+            }
         }
-        protected override void OnKeyDown(KeyEventArgs e)
+
+        // Для проталкивания событий нажатия на кнопки-стрелки
+        private void bt_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            base.OnKeyDown(e);
             switch (e.KeyCode)
             {
                 case Keys.Left:
                 case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
-                    if (e.Shift)
-                    {
-
-                    }
-                    else
-                    {
-                    }
+                    e.IsInputKey = true;
                     break;
             }
         }
-
     }
 }

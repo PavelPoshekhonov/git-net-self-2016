@@ -1,12 +1,11 @@
 ﻿////////////////////////////////////////////////////////////
 // MVC. Контроллер
-// Управлением процессом игры
+// Управление процессом игры
 ////////////////////////////////////////////////////////////
 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace TankWars
@@ -26,10 +25,15 @@ namespace TankWars
         public List<BulletView> BulletViewer = new List<BulletView>();
 
         // Таймеры, запускающие изменение положения объектов
-        public System.Threading.Timer KolobokTimer;
-        public List<System.Threading.Timer> TankTimer = new List<System.Threading.Timer>();
-        public List<System.Threading.Timer> BulletTimer = new List<System.Threading.Timer>();
+        public Timer KolobokTimer;
+        public List<Timer> TankTimer = new List<Timer>();
+        public List<Timer> BulletTimer = new List<Timer>();
 
+        // Признак запущеенной игры
+        bool gameRunning = false;
+        public bool GameRunning { get { return gameRunning; } }
+
+        private Random rnd = new Random();
 
         // Конструктор
         public PackmanController(Control canvas, int tankAmount, int appleAmount, int mDelay)
@@ -41,7 +45,7 @@ namespace TankWars
             // Назначаем обработчики событий "Изменение положения", "Изменение направления"
             KolobokViewer.SetLocationChangedHandler(KolobokObject);
             KolobokViewer.SetDirectionChangedHandler(KolobokObject);
-
+            
             for (int i = 0; i < appleAmount; i++)
             {
                 // Создаем яблоко
@@ -51,16 +55,30 @@ namespace TankWars
                 // Назначаем обработчик события "Изменение положения"
                 AppleViewer[i].SetLocationChangedHandler(AppleList[i]);
             }
-
+            
             for (int i = 0; i < tankAmount; i++)
             {
                 // Создаем танк
-                TankList.Add(new Tank(new Point(50 * (i + 1), 50), new Size(28, 28), Direction.Bottom));
+                TankList.Add(new Tank(new Point(50 * (i + 1), 50), new Size(28, 28), (Direction)rnd.Next(4)));
                 // Создаем отображение танка
                 TankViewer.Add(new TankView(canvas));
                 // Назначаем обработчики событий "Изменение положения", "Изменение направления"
                 TankViewer[i].SetLocationChangedHandler(TankList[i]);
                 TankViewer[i].SetDirectionChangedHandler(TankList[i]);
+            }
+            
+            // Таймер колобка
+            KolobokTimer = new Timer();         // Создаем таймер
+            KolobokTimer.Interval = mDelay;     // Интервал между срабатываниями 
+            KolobokTimer.Tick += new EventHandler(KolobokController); // Подписываемся на события Tick
+            
+            // Таймеры танков
+            for (int i = 0; i < tankAmount; i++)
+            {
+                TankTimer.Add(new Timer());     // Создаем таймер
+                TankTimer[i].Tag = i;           // Сохраняем номер танка, с которым работает таймер
+                TankTimer[i].Interval = mDelay; // Интервал между срабатываниями 
+                TankTimer[i].Tick += new EventHandler(TankController); // Подписываемся на события Tick
             }
         }
 
@@ -68,19 +86,104 @@ namespace TankWars
         public void Dispose()
         {
             KolobokTimer.Dispose();
+
+            foreach (Timer TTimer in TankTimer)
+            {
+                TTimer.Dispose();
+            }
         }
 
 
         // Запустить игру
         public void Play()
         {
-//            KolobokTimer = new System.Threading.Timer(KolobokController, null, 0, 250);
+            // Таймер колобка
+            KolobokTimer.Start();
+
+            // Таймеры танков
+            foreach (Timer TTimer in TankTimer)
+            {
+                TTimer.Start();
+            }
+
+            gameRunning = true;
         }
 
-        // Контроллер колобка
-        void KolobokController(object obj)
+        // Приостановить игру
+        public void Pause()
         {
-            KolobokObject.Location = new Point(KolobokObject.Location.X, KolobokObject.Location.Y + 5);
+            // Таймер колобка
+            KolobokTimer.Stop();
+
+            // Таймеры танков
+            foreach (Timer TTimer in TankTimer)
+            {
+                TTimer.Stop();
+            }
+
+            gameRunning = false;
+        }
+
+
+        // Контроллер колобка
+        void KolobokController(object sender, EventArgs e)
+        {
+            if (KolobokObject == null) return;
+
+            // Предполагаемая новая позиция
+            Point newLocation = GetNewLocation(KolobokObject.Direction, KolobokObject.Location);
+
+            // Проверка предполагаемой позиции
+            if ((newLocation.X >= 0) && (newLocation.X + KolobokObject.Size.Width <= 500) &&
+                (newLocation.Y >= 0) && (newLocation.Y + KolobokObject.Size.Height <= 500)) 
+            {
+                KolobokObject.Location = newLocation;
+            }
+        }
+
+        // Контроллер танка
+        void TankController(object sender, EventArgs e)
+        {
+            int i = (int)(sender as Timer).Tag;
+            if (TankList[i] == null) return;
+
+            Point newLocation = GetNewLocation(TankList[i].Direction, TankList[i].Location);
+
+            // Проверка предполагаемой позиции
+            if ((newLocation.X >= 0) && (newLocation.X + TankList[i].Size.Width <= 500) &&
+                (newLocation.Y >= 0) && (newLocation.Y + TankList[i].Size.Height <= 500))
+            {
+                TankList[i].Location = newLocation;
+            }
+            else
+            {
+                TankList[i].Direction = (Direction)rnd.Next(4);
+            }
+
+        }
+
+        Point GetNewLocation(Direction dir, Point loc)
+        {
+            switch (dir)
+            {
+                case Direction.Left:
+                    {
+                        return new Point(loc.X - 1, loc.Y);
+                    }
+                case Direction.Right:
+                    {
+                        return new Point(loc.X + 1, loc.Y);
+                    }
+                case Direction.Bottom:
+                    {
+                        return new Point(loc.X, loc.Y + 1);
+                    }
+                case Direction.Top:
+                default:
+                    {
+                        return new Point(loc.X, loc.Y - 1);
+                    }
+            }
         }
 
 
