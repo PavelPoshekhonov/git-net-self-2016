@@ -30,6 +30,7 @@
         {
             this.pnMap = new System.Windows.Forms.Panel();
             this.pnBottom = new System.Windows.Forms.Panel();
+            this.btPause = new System.Windows.Forms.Button();
             this.lbTanks = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btNewGame = new System.Windows.Forms.Button();
@@ -37,7 +38,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lbLifes = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btPause = new System.Windows.Forms.Button();
             this.pnBottom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,6 +64,17 @@
             this.pnBottom.Name = "pnBottom";
             this.pnBottom.Size = new System.Drawing.Size(500, 31);
             this.pnBottom.TabIndex = 1;
+            // 
+            // btPause
+            // 
+            this.btPause.Location = new System.Drawing.Point(84, 3);
+            this.btPause.Name = "btPause";
+            this.btPause.Size = new System.Drawing.Size(75, 23);
+            this.btPause.TabIndex = 8;
+            this.btPause.Text = "Pause";
+            this.btPause.UseVisualStyleBackColor = true;
+            this.btPause.Click += new System.EventHandler(this.btPause_Click);
+            this.btPause.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.bt_PreviewKeyDown);
             // 
             // lbTanks
             // 
@@ -130,17 +141,6 @@
             this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Lifes";
-            // 
-            // btPause
-            // 
-            this.btPause.Location = new System.Drawing.Point(84, 3);
-            this.btPause.Name = "btPause";
-            this.btPause.Size = new System.Drawing.Size(75, 23);
-            this.btPause.TabIndex = 8;
-            this.btPause.Text = "Pause";
-            this.btPause.UseVisualStyleBackColor = true;
-            this.btPause.Click += new System.EventHandler(this.btPause_Click);
-            this.btPause.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.bt_PreviewKeyDown);
             // 
             // FormMain
             // 

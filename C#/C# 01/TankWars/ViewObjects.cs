@@ -14,6 +14,10 @@ namespace TankWars
     // Базовый класс отображения статического игрового объекта
     public abstract class GameObjectView
     {
+        // Размеры картинок
+        public static readonly int PicWidth = 28;
+        public static readonly int PicHeight = 28;
+
         protected Control Canvas { get; set; }              // Окно для рисования
         protected PictureBox objectBox = new PictureBox();  // Область для отображения объекта
 
@@ -22,7 +26,8 @@ namespace TankWars
         {
             Canvas = canvas;
             Canvas.Controls.Add(objectBox); // Привязать картинку к игровой области
-            objectBox.SizeMode = PictureBoxSizeMode.AutoSize;
+            objectBox.Size = new Size(PicWidth, PicHeight);
+            objectBox.BackColor = Color.Transparent;
         }
 
         // Установить обработчик события "Изменение положения"
@@ -107,6 +112,8 @@ namespace TankWars
         // Выбрать картинку объекта (загрузить картинку в PictureBox)
         override public void SelectImage(GameObject obj)
         {
+            if ((obj is MovingObject) == false) return;
+
             switch ((obj as MovingObject).Direction)
             {
                 case Direction.Left:
@@ -142,6 +149,8 @@ namespace TankWars
         // Выбрать картинку объекта (загрузить картинку в PictureBox)
         override public void SelectImage(GameObject obj)
         {
+            if ((obj is MovingObject) == false) return;
+
             switch ((obj as MovingObject).Direction)
             {
                 case Direction.Left:
