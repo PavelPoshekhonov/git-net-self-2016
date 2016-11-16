@@ -12,6 +12,15 @@ namespace TankWars
     // Направление движения
     public enum Direction { Left, Right, Top, Bottom }
 
+    // Размеры игровых сущностей
+    public class ObjectSize
+    {
+        // Размеры Яблока, Колобка, Танка
+        public static readonly Size CommonSize = new Size(28, 28);
+        // Размеры Пули
+        public static readonly Size BulletSize = new Size(28, 10);
+    }
+
 
     // Базовый класс статического игрового объекта
     public class GameObject
@@ -49,12 +58,38 @@ namespace TankWars
             size = siz;
             Location = pos;
         }
+
+        // Проверка на пересечение с объектом
+        public bool CheckCrossing(Point loc, Size siz)
+        {
+            bool xCross = false;
+            bool yCross = false;
+
+            if ((Location.X + Size.Width  >= loc.X) && (Location.X <= loc.X + siz.Width))  xCross = true;
+            if ((Location.Y + Size.Height >= loc.Y) && (Location.Y <= loc.Y + siz.Height)) yCross = true;
+
+            if (xCross && yCross)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    // Класс статического игрового объекта: Стена
+    public class Wall : GameObject
+    {
+        // Конструктор
+        public Wall(Point pos, Size siz) : base(pos, siz) { }
     }
 
     // Класс статического игрового объекта: Яблоко
     public class Apple : GameObject
     {
-        public static int GiveScore = 1;                // Сколько дает очков колобку
+        public static int GiveScore = 1;                // Сколько дает очков колобку, если тот соберет яблоко
 
         // Конструктор
         public Apple(Point pos, Size siz) : base(pos, siz) { }
@@ -108,7 +143,7 @@ namespace TankWars
     // Класс двигающегося игрового объекта: Танк
     public class Tank : MovingObject
     {
-        public static int GiveScore = 1;                // Сколько дает очков колобку
+        public static int GiveScore = 1;                // Сколько дает очков колобку, если тот подобьет танк
 
         // Конструктор
         public Tank(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir) { }

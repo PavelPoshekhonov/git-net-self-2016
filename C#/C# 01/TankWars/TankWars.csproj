@@ -68,6 +68,7 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameMap.cs" />
     <Compile Include="GameObjects.cs" />
     <Compile Include="PackmanController.cs" />
     <Compile Include="Program.cs" />

@@ -16,24 +16,40 @@ namespace TankWars
 
         public FormMain(string[] args)
         {
+            int mapWidth;
+            int mapHeight;
+            int tankAmount;
+            int appleAmount;
+            int mDelay;
+
             InitializeComponent();
+
+            // Разбор аргументов командной строки
+            mapWidth = 500;
+            mapHeight = 500;
+            tankAmount = 5;
+            appleAmount = 5;
+            mDelay = 10;
+
+            // Задать размер игрового поля
+            pnMap.Size = new Size(mapWidth, mapHeight);
+            pnBottom.Size = new Size(mapWidth, pnBottom.Size.Height);
+            pnBottom.Location = new Point(pnBottom.Location.X, mapHeight + 28);
+            Size = new Size(mapWidth + 30, mapHeight + 96);
+
+            // Создать контроллер игры
+            GameController = new PackmanController(pnMap, tankAmount, appleAmount, mDelay);
+            KeyDown += GameController.KeyDown; // Обработчик события нажатия на кнопку
+
+            // Запустить игру
+            GameController.Run();
         }
 
         private void btNewGame_Click(object sender, EventArgs e)
         {
-            // Уничтожить контроллер игры (если он есть)
-            if (this.GameController != null)
-            {
-                KeyDown -= this.GameController.KeyDown;
-                ((IDisposable)this.GameController).Dispose();
-            }
-
-            // Создать контроллер игры
-            GameController = new PackmanController(pnMap, 5, 5, 1);
-            KeyDown += GameController.KeyDown; // Обработчик события нажатия на кнопку
-
-            // Запустить игру
-            GameController.Play();
+            GameController.Pause();
+            GameController.InitNewGame();
+            GameController.Run();
         }
 
         private void btPause_Click(object sender, EventArgs e)
@@ -41,10 +57,12 @@ namespace TankWars
             if (GameController.GameRunning == true)
             {
                 GameController.Pause();
+                btPause.Text = "Resume";
             }
             else
             {
-                GameController.Play();
+                GameController.Run();
+                btPause.Text = "Pause";
             }
         }
 

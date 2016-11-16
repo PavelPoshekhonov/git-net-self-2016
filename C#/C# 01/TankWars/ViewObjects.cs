@@ -14,19 +14,13 @@ namespace TankWars
     // Базовый класс отображения статического игрового объекта
     public abstract class GameObjectView
     {
-        // Размеры картинок
-        public static readonly int PicWidth = 28;
-        public static readonly int PicHeight = 28;
-
-        protected Control Canvas { get; set; }              // Окно для рисования
         protected PictureBox objectBox = new PictureBox();  // Область для отображения объекта
 
         // Конструктор
         public GameObjectView(Control canvas)
         {
-            Canvas = canvas;
-            Canvas.Controls.Add(objectBox); // Привязать картинку к игровой области
-            objectBox.Size = new Size(PicWidth, PicHeight);
+            canvas.Controls.Add(objectBox); // Привязать картинку к игровой области
+            objectBox.Size = new Size(10, 10);
             objectBox.BackColor = Color.Transparent;
         }
 
@@ -61,11 +55,28 @@ namespace TankWars
         }
     }
 
+    // Класс отображения статического игрового объекта: Стена
+    public class WallView : GameObjectView
+    {
+        // Конструктор
+        public WallView(Control canvas) : base(canvas) { }
+
+        // Выбрать картинку объекта (загрузить картинку в PictureBox)
+        override public void SelectImage(GameObject obj)
+        {
+            objectBox.Image = Resources.Apple; // Поменять на Wall
+            // Повторяющаяся картинка
+        }
+    }
+
     // Класс отображения статического игрового объекта: Яблоко
     public class AppleView : GameObjectView
     {
         // Конструктор
-        public AppleView(Control canvas) : base(canvas) { }
+        public AppleView(Control canvas) : base(canvas)
+        {
+            objectBox.Size = ObjectSize.CommonSize;
+        }
 
         // Выбрать картинку объекта (загрузить картинку в PictureBox)
         override public void SelectImage(GameObject obj)
@@ -107,7 +118,10 @@ namespace TankWars
     public class KolobokView : MovingObjectView
     {
         // Конструктор
-        public KolobokView(Control canvas) : base(canvas) { }
+        public KolobokView(Control canvas) : base(canvas)
+        {
+            objectBox.Size = ObjectSize.CommonSize;
+        }
 
         // Выбрать картинку объекта (загрузить картинку в PictureBox)
         override public void SelectImage(GameObject obj)
@@ -144,7 +158,10 @@ namespace TankWars
     public class TankView : MovingObjectView
     {
         // Конструктор
-        public TankView(Control canvas) : base(canvas) { }
+        public TankView(Control canvas) : base(canvas)
+        {
+            objectBox.Size = ObjectSize.CommonSize;
+        }
 
         // Выбрать картинку объекта (загрузить картинку в PictureBox)
         override public void SelectImage(GameObject obj)
@@ -181,7 +198,10 @@ namespace TankWars
     public class BulletView : MovingObjectView
     {
         // Конструктор
-        public BulletView(Control canvas) : base(canvas) { }
+        public BulletView(Control canvas) : base(canvas)
+        {
+            objectBox.Size = ObjectSize.BulletSize;
+        }
 
         // Выбрать картинку объекта (загрузить картинку в PictureBox)
         override public void SelectImage(GameObject obj) { }
