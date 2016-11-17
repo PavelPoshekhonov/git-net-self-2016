@@ -127,6 +127,7 @@
             // lbLifes
             // 
             this.lbLifes.AutoSize = true;
+            this.lbLifes.ForeColor = System.Drawing.SystemColors.ControlText;
             this.lbLifes.Location = new System.Drawing.Point(235, 8);
             this.lbLifes.Name = "lbLifes";
             this.lbLifes.Size = new System.Drawing.Size(22, 13);

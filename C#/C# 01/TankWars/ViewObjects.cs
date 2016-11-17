@@ -65,6 +65,8 @@ namespace TankWars
         override public void SelectImage(GameObject obj)
         {
             objectBox.Image = Resources.Wall;
+            objectBox.BackgroundImage = Resources.Wall;
+            objectBox.Size = obj.Size;
             // Повторяющаяся картинка
             objectBox.BackgroundImageLayout = ImageLayout.Tile;
         }
@@ -162,6 +164,14 @@ namespace TankWars
             if ((sender is Kolobok) == false) return;
             if (lbLifes == null) return;
             lbLifes.Text = (sender as Kolobok).LifesLeft.ToString();
+            if ((sender as Kolobok).LifesLeft <= 0)
+            {
+                lbLifes.ForeColor = Color.Red;
+            }
+            else
+            {
+                lbLifes.ForeColor = SystemColors.ControlText;
+            }
         }
          // Обработчик события колобка "Изменение количества собранных яблок"
         public void KolobokApplesCollectedChanged(object sender, EventArgs e)
