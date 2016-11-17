@@ -12,7 +12,7 @@ namespace TankWars
     // Базовый класс карт игры
     class GameMap
     {
-        Size size;
+        protected Size size;
         public Size Size                                // Размер карты
         {
             get { return size; }
@@ -33,10 +33,12 @@ namespace TankWars
         public GameMap01(Size siz) : base(siz)
         {
             double xStep;
+            int Blank = 7;
             Point pntWall = new Point();
             Size sizWall = new Size();
 
-            if (Size.Width < 13 * ObjectSize.CommonSize.Width + 5) return;
+            // Карта уровня 01 не должна быть меньше чем 500 x 500
+            size = new Size(Math.Max(size.Width, 500), Math.Max(size.Height, 500));
 
             xStep = Size.Width / 13;
 
@@ -46,11 +48,11 @@ namespace TankWars
                 pntWall.X = Convert.ToInt32(i * xStep);
                 sizWall.Width = ObjectSize.CommonSize.Width;
                 if ((i == 5) || (i == 7))
-                    sizWall.Height = Convert.ToInt32(Size.Height / 2 - ObjectSize.CommonSize.Height * 4) - 5;
+                    sizWall.Height = Convert.ToInt32(Size.Height / 2 - ObjectSize.CommonSize.Height * 4) - Blank;
                 else
-                    sizWall.Height = Convert.ToInt32(Size.Height / 2 - ObjectSize.CommonSize.Height * 3) - 5;
+                    sizWall.Height = Convert.ToInt32(Size.Height / 2 - ObjectSize.CommonSize.Height * 3) - Blank;
 
-                pntWall.Y = ObjectSize.CommonSize.Height + 5;
+                pntWall.Y = ObjectSize.CommonSize.Height + Blank;
                 WallList.Add(new Wall(pntWall, sizWall));
 
                 if ((i == 5) || (i == 7))

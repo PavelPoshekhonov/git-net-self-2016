@@ -16,26 +16,39 @@ namespace TankWars
 
         public FormMain(string[] args)
         {
-            int mapWidth;
-            int mapHeight;
-            int tankAmount;
-            int appleAmount;
-            int mDelay;
+            int mapWidth = 800;
+            int mapHeight = 600;
+            int tankAmount = 5;
+            int appleAmount = 5;
+            int mDelay = 10;
 
             InitializeComponent();
 
             // Разбор аргументов командной строки
-            mapWidth = 500;
-            mapHeight = 500;
-            tankAmount = 5;
-            appleAmount = 5;
-            mDelay = 10;
+            if (args.Length >= 1)   // Размеры игрового поля (ширина и высота)
+            {
+                try
+                {
+                }
+                catch (IndexOutOfRangeException)
+                {
+                }
+            }
+
+            if (args.Length >= 2)   // Количество танков на поле
+                int.TryParse(args[1], out tankAmount);
+
+            if (args.Length >= 3)   // Количество яблок на поле
+                int.TryParse(args[2], out appleAmount);
+
+            if (args.Length >= 3)   // Скорость передвижения объектов (задается для всех объектов сразу)
+                int.TryParse(args[2], out mDelay);
 
             // Задать размер игрового поля
             pnMap.Size = new Size(mapWidth, mapHeight);
             pnBottom.Size = new Size(mapWidth, pnBottom.Size.Height);
             pnBottom.Location = new Point(pnBottom.Location.X, mapHeight + 28);
-            Size = new Size(mapWidth + 30, mapHeight + 96);
+            Size = new Size(mapWidth + 30, mapHeight + 106);
 
             // Создать контроллер игры
             GameController = new PackmanController(pnMap, lbLifes, lbApples, lbTanks, tankAmount, appleAmount, mDelay);
