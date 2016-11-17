@@ -1,7 +1,7 @@
 ﻿////////////////////////////////////////////////////////////
 // MVC. Бизнес уровень
 // Классы сущностей игровых объектов:
-// Яблоко, Колобок, Танк, Пуля
+// Стена, Яблоко, Колобок, Танк, Пуля
 ////////////////////////////////////////////////////////////
 
 using System;
@@ -15,10 +15,10 @@ namespace TankWars
     // Размеры игровых сущностей
     public class ObjectSize
     {
-        // Размеры Яблока, Колобка, Танка
+        // Размеры Стены, Яблока, Колобка, Танка
         public static readonly Size CommonSize = new Size(28, 28);
         // Размеры Пули
-        public static readonly Size BulletSize = new Size(28, 10);
+        public static readonly Size BulletSize = new Size(5, 2);
     }
 
 
@@ -132,9 +132,58 @@ namespace TankWars
     // Класс двигающегося игрового объекта: Колобок
     public class Kolobok : MovingObject
     {
-        public int LifesLeft { get; set; } = 3;         // Оставшиеся жизни
-        public int ApplesCollected { get; set; } = 0;   // Собранные яблоки
-        public int TanksKilled { get; set; } = 0;       // Подбитые танки
+        // События
+        public event EventHandler LifesLeftChanged;         // Изменение оставшихся жизней
+        protected virtual void OnLifesLeftChanged(EventArgs e)
+        {
+            LifesLeftChanged?.Invoke(this, e);
+        }
+
+        public event EventHandler ApplesCollectedChanged;   // Изменение количества собранных яблок
+        protected virtual void OnApplesCollectedChanged(EventArgs e)
+        {
+            ApplesCollectedChanged?.Invoke(this, e);
+        }
+
+        public event EventHandler TanksKilledChanged;       // Изменение количества подбитых танков
+        protected virtual void OnTanksKilledChanged(EventArgs e)
+        {
+            TanksKilledChanged?.Invoke(this, e);
+        }
+
+        // Поля
+        int lifesLeft = 3;
+        public int LifesLeft                                // Оставшиеся жизни
+        { 
+            get {return lifesLeft; }
+            set
+            {
+                lifesLeft = value;
+                OnLifesLeftChanged(EventArgs.Empty);
+            } 
+        }
+
+        int applesCollected = 0;
+        public int ApplesCollected                          // Собранные яблоки
+        {
+            get { return applesCollected; }
+            set
+            {
+                applesCollected = value;
+                OnApplesCollectedChanged(EventArgs.Empty);
+            }
+        }
+
+        int tanksKilled = 0;
+        public int TanksKilled                              // Подбитые танки
+        {
+            get { return tanksKilled; }
+            set
+            {
+                tanksKilled = value;
+                OnTanksKilledChanged(EventArgs.Empty);
+            }
+        }
 
         // Конструктор
         public Kolobok(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir) { }

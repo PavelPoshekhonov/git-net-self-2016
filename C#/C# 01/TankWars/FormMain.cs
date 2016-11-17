@@ -38,7 +38,7 @@ namespace TankWars
             Size = new Size(mapWidth + 30, mapHeight + 96);
 
             // Создать контроллер игры
-            GameController = new PackmanController(pnMap, tankAmount, appleAmount, mDelay);
+            GameController = new PackmanController(pnMap, lbLifes, lbApples, lbTanks, tankAmount, appleAmount, mDelay);
             KeyDown += GameController.KeyDown; // Обработчик события нажатия на кнопку
 
             // Запустить игру

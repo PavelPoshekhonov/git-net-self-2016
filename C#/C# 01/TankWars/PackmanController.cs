@@ -12,82 +12,92 @@ namespace TankWars
 {
     public class PackmanController
     {
+        // Игровая карта
+        GameMap gameMap;
+
         // Игровые объекты
-        Kolobok KolobokObject;
-        List<Apple> AppleList = new List<Apple>();
-        List<Tank> TankList = new List<Tank>();
-        List<Bullet> BulletList = new List<Bullet>();
+        Kolobok kolobokObject;
+        List<Apple> appleList = new List<Apple>();
+        List<Tank> tankList = new List<Tank>();
+        List<Bullet> bulletList = new List<Bullet>();
 
         // Отображение игровых объектов
-        KolobokView KolobokViewer;
-        List<AppleView> AppleViewer = new List<AppleView>();
-        List<TankView> TankViewer = new List<TankView>();
-        List<BulletView> BulletViewer = new List<BulletView>();
+        KolobokView kolobokViewer;
+        List<AppleView> appleViewer = new List<AppleView>();
+        List<TankView> tankViewer = new List<TankView>();
+        List<BulletView> bulletViewer = new List<BulletView>();
 
         // Таймеры, запускающие изменение положения объектов
-        Timer KolobokTimer;
-        List<Timer> TankTimer = new List<Timer>();
-        List<Timer> BulletTimer = new List<Timer>();
+        Timer kolobokTimer;
+        List<Timer> tankTimer = new List<Timer>();
+        List<Timer> bulletTimer = new List<Timer>();
 
         // Признак запущенной игры
         bool gameRunning = false;
         public bool GameRunning { get { return gameRunning; } }
 
         // Генератор случайных чисел
-        private Random rnd = new Random();
+        Random rnd = new Random();
 
         // Размер игровой карты
         Size mapSize;
 
 
         // Конструктор. Создает объекты, но не запускает таймеры движения объектов
-        public PackmanController(Control canvas, int tankAmount, int appleAmount, int mDelay)
+        public PackmanController(Control canvas, Label lbLf, Label lbAp, Label lbTn, int tankAmount, int appleAmount, int mDelay)
         {
             // Сохраняем размер игровой карты
             mapSize = canvas.Size;
 
-            // Создаем колобка
-            KolobokObject = new Kolobok(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize, Direction.Top);
-            // Создаем отображение колобка
-            KolobokViewer = new KolobokView(canvas);
-            // Назначаем обработчики событий "Изменение положения", "Изменение направления"
-            KolobokViewer.SetLocationChangedHandler(KolobokObject);
-            KolobokViewer.SetDirectionChangedHandler(KolobokObject);
-            
-            for (int i = 0; i < appleAmount; i++)
-            {
-                // Создаем яблоко
-                AppleList.Add(new Apple(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize));
-                // Создаем отображение яблока
-                AppleViewer.Add(new AppleView(canvas));
-                // Назначаем обработчик события "Изменение положения"
-                AppleViewer[i].SetLocationChangedHandler(AppleList[i]);
-            }
-            
+            // Создаем карту
+            gameMap = new GameMap01(mapSize);
+            // !!! Создаем отображение карты
+
             for (int i = 0; i < tankAmount; i++)
             {
                 // Создаем танк
-                TankList.Add(new Tank(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize, (Direction)rnd.Next(4)));
+                tankList.Add(new Tank(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize, (Direction)rnd.Next(4)));
                 // Создаем отображение танка
-                TankViewer.Add(new TankView(canvas));
+                tankViewer.Add(new TankView(canvas));
                 // Назначаем обработчики событий "Изменение положения", "Изменение направления"
-                TankViewer[i].SetLocationChangedHandler(TankList[i]);
-                TankViewer[i].SetDirectionChangedHandler(TankList[i]);
+                tankViewer[i].SetLocationChangedHandler(tankList[i]);
+                tankViewer[i].SetDirectionChangedHandler(tankList[i]);
+            }
+
+            // Создаем колобка
+            kolobokObject = new Kolobok(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize, Direction.Top);
+            kolobokObject.LifesLeftChanged += KolobokLifesLeftChanged;
+            // Создаем отображение колобка
+            kolobokViewer = new KolobokView(canvas, lbLf, lbAp, lbTn);
+            // Назначаем обработчики событий "Изменение положения", "Изменение направления"
+            kolobokViewer.SetLocationChangedHandler(kolobokObject);
+            kolobokViewer.SetDirectionChangedHandler(kolobokObject);
+            kolobokViewer.SetGameEventsHandler(kolobokObject);
+
+
+            for (int i = 0; i < appleAmount; i++)
+            {
+                // Создаем яблоко
+                appleList.Add(new Apple(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize));
+                // Создаем отображение яблока
+                appleViewer.Add(new AppleView(canvas));
+                // Назначаем обработчик события "Изменение положения"
+                appleViewer[i].SetLocationChangedHandler(appleList[i]);
             }
             
 
             // Таймер колобка
-            KolobokTimer = new Timer();         // Создаем таймер
-            KolobokTimer.Interval = mDelay;     // Интервал между срабатываниями 
-            KolobokTimer.Tick += new EventHandler(KolobokController); // Подписываемся на события Tick
+            kolobokTimer = new Timer();         // Создаем таймер
+            kolobokTimer.Interval = mDelay;     // Интервал между срабатываниями 
+            kolobokTimer.Tick += new EventHandler(KolobokController); // Подписываемся на события Tick
             
             // Таймеры танков
             for (int i = 0; i < tankAmount; i++)
             {
-                TankTimer.Add(new Timer());     // Создаем таймер
-                TankTimer[i].Tag = i;           // Сохраняем номер танка, с которым работает таймер
-                TankTimer[i].Interval = mDelay; // Интервал между срабатываниями 
-                TankTimer[i].Tick += new EventHandler(TankController); // Подписываемся на события Tick
+                tankTimer.Add(new Timer());     // Создаем таймер
+                tankTimer[i].Tag = i;           // Сохраняем номер танка, с которым работает таймер
+                tankTimer[i].Interval = mDelay; // Интервал между срабатываниями 
+                tankTimer[i].Tick += new EventHandler(TankController); // Подписываемся на события Tick
             }
         }
 
@@ -95,21 +105,20 @@ namespace TankWars
         // Подготовить новую игру (для уже созданных объектов)
         public void InitNewGame()
         {
-            if (KolobokObject == null) return;
+            if (kolobokObject == null) return;
 
             // Реинициализировать параметры колобка
-            KolobokObject.LifesLeft = 3;
-            KolobokObject.ApplesCollected = 0;
-            KolobokObject.TanksKilled = 0;
+            kolobokObject.LifesLeft = 3;
+            kolobokObject.ApplesCollected = 0;
+            kolobokObject.TanksKilled = 0;
 
             // Новое положение объектов
-            // !!! Пересоздать карту объекта
-            KolobokObject.Location = GetRandomLocation(KolobokObject.Size);
-            foreach (Apple app in AppleList)
+            kolobokObject.Location = GetRandomLocation(kolobokObject.Size);
+            foreach (Apple app in appleList)
             {
                 app.Location = GetRandomLocation(app.Size);
             }
-            foreach (Tank tnk in TankList)
+            foreach (Tank tnk in tankList)
             {
                 tnk.Location = GetRandomLocation(tnk.Size);
                 tnk.Direction = (Direction)rnd.Next(4);
@@ -120,13 +129,13 @@ namespace TankWars
         public void Run()
         {
             // Играет только живой колобок
-            if (KolobokObject.LifesLeft <= 0) return;
+            if (kolobokObject.LifesLeft <= 0) return;
 
             // Запускаем таймер колобка
-            KolobokTimer.Start();
+            kolobokTimer.Start();
 
             // Запускаем таймеры танков
-            foreach (Timer tmr in TankTimer)
+            foreach (Timer tmr in tankTimer)
             {
                 tmr.Start();
             }
@@ -138,10 +147,10 @@ namespace TankWars
         public void Pause()
         {
             // Останавливаем таймер колобка
-            KolobokTimer.Stop();
+            kolobokTimer.Stop();
 
             // Останавливаем таймеры танков
-            foreach (Timer TTimer in TankTimer)
+            foreach (Timer TTimer in tankTimer)
             {
                 TTimer.Stop();
             }
@@ -150,46 +159,120 @@ namespace TankWars
         }
 
 
+        // Обработчик события колобка "Изменение оставшихся жизней"
+        public void KolobokLifesLeftChanged(object sender, EventArgs e)
+        {
+            if ((sender is Kolobok) == false) return;
+            // Конец игры. Ставим на паузу (после которой можно запустить только новую игру)
+            if ((sender as Kolobok).LifesLeft <= 0)
+            {
+                Pause();
+                MessageBox.Show("Game over!");
+            }
+        }
+
         // Контроллер колобка
         void KolobokController(object sender, EventArgs e)
         {
-            if (KolobokObject == null) return;
+            if (kolobokObject == null) return;
 
             // Предполагаемая новая позиция
-            Point newLocation = GetNewLocation(KolobokObject.Direction, KolobokObject.Location);
+            Point newLocation = GetNewLocation(kolobokObject.Direction, kolobokObject.Location);
 
             // Проверка на выход за пределы карты
-            if ((CheckOutOfMap(newLocation, KolobokObject.Size) == true)) return;
+            if ((CheckOutOfMap(newLocation, kolobokObject.Size) == true)) return;
 
             // Проверка пересечений
-            List<GameObject> crossObjects = CheckAllCrossing(newLocation, KolobokObject.Size, KolobokObject);
-            // Проверка пересечения со стенами
-            // Проверка пересечения с яблоками
-            // Проверка пересечения с танками
+            List<GameObject> crossObjects = CheckAllCrossing(newLocation, kolobokObject.Size, kolobokObject);
 
-            // Переход на новую позицию
-            KolobokObject.Location = newLocation;
+            // Пересечений нет
+            if (crossObjects.Count == 0)
+            {
+                kolobokObject.Location = newLocation;   // Переход на новую позицию
+                return;
+            }
+
+            // Проверка пересечений
+            foreach (GameObject go in crossObjects)
+            {
+                if (go is Wall) return; // Колобок уперся в стену. Ничего не делаем
+                if (go is Apple)        // Колобок съел яблоко
+                {
+                    kolobokObject.ApplesCollected += Apple.GiveScore;
+                    go.Location = GetRandomLocation(ObjectSize.CommonSize);
+                    kolobokObject.Location = newLocation;   // Переход на новую позицию
+                }
+                if (go is Tank)         // Колобок нарвался на танк
+                {
+                    kolobokObject.Location = newLocation;   // Переход на новую позицию
+                    kolobokObject.LifesLeft--;
+                    if (kolobokObject.LifesLeft <= 0) return;
+                }
+                if (go is Bullet)       // Колобка подбила пуля 
+                {
+                    kolobokObject.Location = newLocation;   // Переход на новую позицию
+                    kolobokObject.LifesLeft--;
+                    if (kolobokObject.LifesLeft <= 0) return;
+                    // !!! Уничтожить пулю
+                }
+            }
         }
 
         // Контроллер танка
         void TankController(object sender, EventArgs e)
         {
             int i = (int)(sender as Timer).Tag;
-            if (TankList[i] == null) return;
+            if (tankList[i] == null) return;
 
-            Point newLocation = GetNewLocation(TankList[i].Direction, TankList[i].Location);
+            // Предполагаемая новая позиция
+            Point newLocation = GetNewLocation(tankList[i].Direction, tankList[i].Location);
 
-            // Проверка предполагаемой позиции
-            if ((newLocation.X >= 0) && (newLocation.X + TankList[i].Size.Width <= 500) &&
-                (newLocation.Y >= 0) && (newLocation.Y + TankList[i].Size.Height <= 500))
+            // Проверка на выход за пределы карты
+            if ((CheckOutOfMap(newLocation, tankList[i].Size) == true))
             {
-                TankList[i].Location = newLocation;
-            }
-            else
-            {
-                TankList[i].Direction = (Direction)rnd.Next(4);
+                tankList[i].Direction = (Direction)rnd.Next(4);
+                return;
             }
 
+            // Проверка пересечений
+            List<GameObject> crossObjects = CheckAllCrossing(newLocation, tankList[i].Size, tankList[i]);
+
+            // Пересечений нет
+            if (crossObjects.Count == 0)
+            {
+                tankList[i].Location = newLocation;   // Переход на новую позицию
+                return;
+            }
+
+            // Проверка пересечений
+            foreach (GameObject go in crossObjects)
+            {
+                if (go is Wall)         // Танк уперся в стену. Меняем направление на случайное
+                {
+                    tankList[i].Direction = (Direction)rnd.Next(4);
+                }
+                if (go is Tank)         // Танк столкнулся другим с танком. Меняем направление на случайное
+                {
+                    tankList[i].Direction = (Direction)rnd.Next(4);
+                }
+                if (go is Kolobok)      // Танк задавил колобка
+                {
+                    tankList[i].Location = newLocation; // Переход на новую позицию
+                    kolobokObject.LifesLeft--;
+                    if (kolobokObject.LifesLeft <= 0) return;
+                    kolobokObject.Location = GetRandomLocation(ObjectSize.CommonSize);
+                }
+                if (go is Bullet)       // Танк был подбит пулей (неважно чьей)
+                {
+                    kolobokObject.TanksKilled += Tank.GiveScore;    // Бонус колобку
+                    tankList[i].Location = GetRandomLocation(ObjectSize.CommonSize);
+                    // !!! Уничтожить пулю
+                }
+                if (go is Apple)
+                {
+                    tankList[i].Location = newLocation; // Переход на новую позицию
+                }
+            }
         }
 
 
@@ -212,19 +295,29 @@ namespace TankWars
             List<GameObject> result = new List<GameObject>();
 
             // Проверяем все объект на предмет пересечения с прямоугольником (loc, siz)
-            if ((KolobokObject != null) && (KolobokObject.CheckCrossing(loc, siz)))
-                result.Add(KolobokObject);
-
-            foreach (Apple app in AppleList)
+            foreach (Wall wll in gameMap.WallList)  // Стены
+            {
+                if (wll.CheckCrossing(loc, siz))
+                    result.Add(wll);
+            }
+            foreach (Apple app in appleList)        // Яблоки
             {
                 if (app.CheckCrossing(loc, siz))
                     result.Add(app);
             }
-            foreach (Tank tnk in TankList)
+            foreach (Tank tnk in tankList)          // Танки
             {
                 if (tnk.CheckCrossing(loc, siz))
                     result.Add(tnk);
             }
+            foreach (Bullet blt in bulletList)      // Пули
+            {
+                if (blt.CheckCrossing(loc, siz))
+                    result.Add(blt);
+            }
+
+            if ((kolobokObject != null) && (kolobokObject.CheckCrossing(loc, siz)))     // Колобок
+                result.Add(kolobokObject);
 
             // Исключаем "пересечение c самим собой" при проверке новой позиции сдвинутой на 1 пиксел
             if (selfObj != null)
@@ -234,6 +327,7 @@ namespace TankWars
                     if (res.Equals(selfObj))
                     {
                         result.Remove(res);
+                        break;
                     }
                 }
             }
@@ -242,7 +336,7 @@ namespace TankWars
         }
 
         // Проверить, не выходит ли объект за область игрового поля
-        private bool CheckOutOfMap(Point loc, Size siz)
+        bool CheckOutOfMap(Point loc, Size siz)
         {
             // Если объект полностью внутри карты
             if ((loc.X >= 0) && (loc.X + siz.Width <= mapSize.Width) &&
@@ -287,27 +381,27 @@ namespace TankWars
         // Реакция на нажатие кнопки: Управление колобком
         public void KeyDown(object sender, KeyEventArgs e)
         {
-            if (KolobokObject == null) return;
+            if (kolobokObject == null) return;
             switch (e.KeyCode)
             {
                 case Keys.Left:
                     {
-                        KolobokObject.Direction = Direction.Left;
+                        kolobokObject.Direction = Direction.Left;
                         break;
                     }
                 case Keys.Right:
                     {
-                        KolobokObject.Direction = Direction.Right;
+                        kolobokObject.Direction = Direction.Right;
                         break;
                     }
                 case Keys.Up:
                     {
-                        KolobokObject.Direction = Direction.Top;
+                        kolobokObject.Direction = Direction.Top;
                         break;
                     }
                 case Keys.Down:
                     {
-                        KolobokObject.Direction = Direction.Bottom;
+                        kolobokObject.Direction = Direction.Bottom;
                         break;
                     }
                 default:

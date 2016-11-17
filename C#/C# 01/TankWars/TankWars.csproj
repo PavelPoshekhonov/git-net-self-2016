@@ -112,7 +112,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Bullet_H.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Apple.png" />
   </ItemGroup>
@@ -139,6 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Tank_T.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Bullet_V.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wall.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
