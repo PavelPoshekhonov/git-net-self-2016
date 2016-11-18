@@ -154,6 +154,7 @@
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tank Wars";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.pnBottom.ResumeLayout(false);
             this.pnBottom.PerformLayout();
             this.ResumeLayout(false);

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace TankWars
 {
-    public class PackmanController
+    public class PackmanController : IDisposable
     {
         // Игровая карта
         GameMap gameMap;
@@ -106,6 +106,34 @@ namespace TankWars
             }
         }
 
+        // Деструктор
+        public void Dispose()
+        {
+            // Остановка таймеров
+            Pause();
+            kolobokTimer.Tick -= KolobokController; // Отписываемся от событий Tick
+            foreach (Timer tmr in tankTimer)
+            {
+                tmr.Tick -= TankController;         // Отписываемся от событий Tick
+            }
+
+            // Отписка от событий
+            for (int i = 0; i < appleList.Count; i++)
+            {
+                appleViewer[i].UnSetLocationChangedHandler(appleList[i]);
+            }
+            for (int i = 0; i < tankList.Count; i++)
+            {
+                tankViewer[i].UnSetLocationChangedHandler(tankList[i]);
+                tankViewer[i].UnSetDirectionChangedHandler(tankList[i]);
+            }
+
+            kolobokViewer.UnSetLocationChangedHandler(kolobokObject);
+            kolobokViewer.UnSetDirectionChangedHandler(kolobokObject);
+            kolobokObject.LifesLeftChanged -= KolobokLifesLeftChanged;
+            kolobokViewer.UnSetGameEventsHandler(kolobokObject);
+
+        }
 
         // Подготовить новую игру (для уже созданных объектов)
         public void InitNewGame()
@@ -155,9 +183,9 @@ namespace TankWars
             kolobokTimer.Stop();
 
             // Останавливаем таймеры танков
-            foreach (Timer TTimer in tankTimer)
+            foreach (Timer tmr in tankTimer)
             {
-                TTimer.Stop();
+                tmr.Stop();
             }
 
             gameRunning = false;

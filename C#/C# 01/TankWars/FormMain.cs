@@ -113,5 +113,11 @@ namespace TankWars
                     break;
             }
         }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            KeyDown -= GameController.KeyDown; // Обработчик события нажатия на кнопку
+            GameController.Dispose();
+        }
     }
 }
