@@ -18,8 +18,8 @@ namespace TankWars
         {
             int mapWidth = 800;
             int mapHeight = 600;
-            int tankAmount = 5;
-            int appleAmount = 5;
+            int tankAmount = 1;
+            int appleAmount = 1;
             int mDelay = 10;
 
             InitializeComponent();
@@ -27,11 +27,11 @@ namespace TankWars
             // Разбор аргументов командной строки
             if (args.Length >= 1)   // Размеры игрового поля (ширина и высота)
             {
-                try
+                string[] split = args[0].Split(new char[] { 'x', 'X', 'х', 'Х' }, StringSplitOptions.RemoveEmptyEntries);
+                if (split.Length == 2)
                 {
-                }
-                catch (IndexOutOfRangeException)
-                {
+                    int.TryParse(split[0], out mapWidth);
+                    int.TryParse(split[1], out mapHeight);
                 }
             }
 
@@ -42,7 +42,28 @@ namespace TankWars
                 int.TryParse(args[2], out appleAmount);
 
             if (args.Length >= 3)   // Скорость передвижения объектов (задается для всех объектов сразу)
-                int.TryParse(args[2], out mDelay);
+            {
+                int speed;
+                int.TryParse(args[3], out speed);
+                switch (speed)
+                {
+                    case 1:
+                        {
+                            mDelay = 50;
+                            break;
+                        }
+                    case 2:
+                        {
+                            mDelay = 25;
+                            break;
+                        }
+                    default:
+                        {
+                            mDelay = 10;
+                            break;
+                        }
+                }
+            }
 
             // Задать размер игрового поля
             pnMap.Size = new Size(mapWidth, mapHeight);
