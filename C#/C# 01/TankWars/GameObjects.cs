@@ -18,7 +18,8 @@ namespace TankWars
         // Размеры Стены, Яблока, Колобка, Танка
         public static readonly Size CommonSize = new Size(28, 28);
         // Размеры Пули
-        public static readonly Size BulletSize = new Size(5, 2);
+        public static readonly Size BulletH = new Size(8, 4);
+        public static readonly Size BulletV = new Size(4, 8);
     }
 
 
@@ -37,6 +38,7 @@ namespace TankWars
         public Size Size                                // Размер объекта
         {
             get { return size; }
+            protected set { size = value; }
         }
 
         Point location;
@@ -201,7 +203,45 @@ namespace TankWars
     // Класс двигающегося игрового объекта: Пуля
     public class Bullet : MovingObject
     {
+        // События
+        public event EventHandler ActiveChanged;        // Запуск / Остановка пули
+        protected virtual void OnActiveChanged(EventArgs e)
+        {
+            ActiveChanged?.Invoke(this, e);
+        }
+
+        // Поля
+        bool active = false;
+        public bool Active                              // Признак запущенной пули
+        {
+            get { return active; }
+            set {
+                active = value;
+
+                // Вызов события
+                OnActiveChanged(EventArgs.Empty);
+            }
+        }
+
         // Конструктор
-        public Bullet(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir) { }
+        public Bullet(Point pos, Size siz, Direction dir = Direction.Bottom) : base(pos, siz, dir)
+        {
+            this.DirectionChanged += ThisDirectionChanged;
+
+            ThisDirectionChanged(this, EventArgs.Empty); // Принудительное обновление
+        }
+
+        // Деструктор
+        // !!! Отмена обработчика
+
+        // Обработчик события "Изменение направления"
+        public void ThisDirectionChanged(object sender, EventArgs e)
+        {
+            // Задаем размер объекта в зависимости от направления
+            if ((Direction == Direction.Left) || (Direction == Direction.Right))
+                Size = ObjectSize.BulletH;
+            else
+                Size = ObjectSize.BulletV;
+        }
     }
 }

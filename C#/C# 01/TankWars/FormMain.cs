@@ -20,7 +20,7 @@ namespace TankWars
             int mapHeight = 600;
             int tankAmount = 1;
             int appleAmount = 1;
-            int mDelay = 10;
+            int moveDelay = 10;
 
             InitializeComponent();
 
@@ -49,17 +49,17 @@ namespace TankWars
                 {
                     case 1:
                         {
-                            mDelay = 50;
+                            moveDelay = 50;
                             break;
                         }
                     case 2:
                         {
-                            mDelay = 25;
+                            moveDelay = 25;
                             break;
                         }
                     default:
                         {
-                            mDelay = 10;
+                            moveDelay = 10;
                             break;
                         }
                 }
@@ -72,7 +72,7 @@ namespace TankWars
             Size = new Size(mapWidth + 30, mapHeight + 106);
 
             // Создать контроллер игры
-            GameController = new PackmanController(pnMap, lbLifes, lbApples, lbTanks, tankAmount, appleAmount, mDelay);
+            GameController = new PackmanController(pnMap, lbLifes, lbApples, lbTanks, tankAmount, appleAmount, moveDelay);
             KeyDown += GameController.KeyDown; // Обработчик события нажатия на кнопку
 
             // Запустить игру
@@ -109,6 +109,7 @@ namespace TankWars
                 case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
+                case Keys.Tab:
                     e.IsInputKey = true;
                     break;
             }

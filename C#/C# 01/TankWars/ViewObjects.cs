@@ -20,7 +20,7 @@ namespace TankWars
         public GameObjectView(Control canvas)
         {
             canvas.Controls.Add(objectBox); // Привязать картинку к игровой области
-            objectBox.Size = new Size(10, 10);
+            objectBox.Size = new Size(2, 2);
             objectBox.BackColor = Color.Transparent;
         }
 
@@ -264,12 +264,43 @@ namespace TankWars
     public class BulletView : MovingObjectView
     {
         // Конструктор
-        public BulletView(Control canvas) : base(canvas)
+        public BulletView(Control canvas) : base(canvas) { }
+
+        // Установить обработчик события "Изменение активности"
+        public void SetActiveChangedHandler(Bullet obj)
         {
-            objectBox.Size = ObjectSize.BulletSize;
+            obj.ActiveChanged += ObjectActiveChanged;
+            ObjectActiveChanged(obj, EventArgs.Empty); // Принудительное обновление
+        }
+
+        // Очистить обработчик события "Изменение активности"
+        public void UnSetActiveChangedHandler(Bullet obj)
+        {
+            obj.ActiveChanged -= ObjectActiveChanged;
+        }
+
+        // Обработчик события "Изменение активности"
+        public void ObjectActiveChanged(object sender, EventArgs e)
+        {
+            if ((sender is Bullet) == false) return;
+            objectBox.Visible = (sender as Bullet).Active;
         }
 
         // Выбрать картинку объекта (загрузить картинку в PictureBox)
-        override public void SelectImage(GameObject obj) { }
+        override public void SelectImage(GameObject obj)
+        {
+            if ((obj is MovingObject) == false) return;
+
+            objectBox.Size = obj.Size;
+
+            if (((obj as MovingObject).Direction == Direction.Left) || ((obj as MovingObject).Direction == Direction.Right))
+            {
+                objectBox.Image = Resources.Bullet_H;
+            }
+            else
+            {
+                objectBox.Image = Resources.Bullet_V;
+            }
+        }
     }
 }

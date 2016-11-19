@@ -40,25 +40,41 @@ namespace TankWars
         // Генератор случайных чисел
         Random rnd = new Random();
 
-        // Размер игровой карты
-        Size mapSize;
+        // Игровая карта
+        Control canvas;
+
+        // Задержка таймера
+        int moveDelay;
 
 
         // Конструктор. Создает объекты, но не запускает таймеры движения объектов
-        public PackmanController(Control canvas, Label lbLf, Label lbAp, Label lbTn, int tankAmount, int appleAmount, int mDelay)
+        public PackmanController(Control cnv, Label lbLf, Label lbAp, Label lbTn, int tankAmount, int appleAmount, int mDelay)
         {
-            // Сохраняем размер игровой карты
-            mapSize = canvas.Size;
+            // Сохраняем игровую карту и скорость
+            canvas = cnv;
+            moveDelay = mDelay;
 
             // Создаем карту
-            gameMap = new GameMap01(mapSize);
+            gameMap = new GameMap01(canvas.Size);
             // Создаем отображение карты
             viewMap = new ViewMap();
             viewMap.ShowMap(canvas, gameMap);
 
+            for (int i = 0; i <= tankAmount; i++) // Пуль столько же, сколько и танков + 1 (от колобка)
+            {
+                // Создаем пули (неактивные)
+                bulletList.Add(new Bullet(new Point(0, 0), ObjectSize.BulletH));
+                // Создаем отображение пули
+                bulletViewer.Add(new BulletView(canvas));
+                // Назначаем обработчики событий "Изменение положения", "Изменение направления", "Изменение активности"
+                bulletViewer[i].SetLocationChangedHandler(bulletList[i]);
+                bulletViewer[i].SetDirectionChangedHandler(bulletList[i]);
+                bulletViewer[i].SetActiveChangedHandler(bulletList[i]);
+            }
+
             for (int i = 0; i < tankAmount; i++)
             {
-                // Создаем танк
+                // Создаем танки
                 tankList.Add(new Tank(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize, (Direction)rnd.Next(4)));
                 // Создаем отображение танка
                 tankViewer.Add(new TankView(canvas));
@@ -82,7 +98,7 @@ namespace TankWars
 
             for (int i = 0; i < appleAmount; i++)
             {
-                // Создаем яблоко
+                // Создаем яблоки
                 appleList.Add(new Apple(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize));
                 // Создаем отображение яблока
                 appleViewer.Add(new AppleView(canvas));
@@ -93,16 +109,23 @@ namespace TankWars
 
             // Таймер колобка
             kolobokTimer = new Timer();         // Создаем таймер
-            kolobokTimer.Interval = mDelay;     // Интервал между срабатываниями 
+            kolobokTimer.Interval = moveDelay;     // Интервал между срабатываниями 
             kolobokTimer.Tick += new EventHandler(KolobokController); // Подписываемся на события Tick
             
             // Таймеры танков
             for (int i = 0; i < tankAmount; i++)
             {
                 tankTimer.Add(new Timer());     // Создаем таймер
-                tankTimer[i].Tag = i;           // Сохраняем номер танка, с которым работает таймер
-                tankTimer[i].Interval = mDelay; // Интервал между срабатываниями 
+                tankTimer[i].Interval = moveDelay; // Интервал между срабатываниями 
                 tankTimer[i].Tick += new EventHandler(TankController); // Подписываемся на события Tick
+            }
+
+            // Таймеры пуль
+            for (int i = 0; i <= tankAmount; i++)
+            {
+                bulletTimer.Add(new Timer());     // Создаем таймер
+                bulletTimer[i].Interval = moveDelay; // Интервал между срабатываниями 
+                bulletTimer[i].Tick += new EventHandler(BulletController); // Подписываемся на события Tick
             }
         }
 
@@ -116,6 +139,10 @@ namespace TankWars
             {
                 tmr.Tick -= TankController;         // Отписываемся от событий Tick
             }
+            foreach (Timer tmr in bulletTimer)
+            {
+                tmr.Tick -= BulletController;       // Отписываемся от событий Tick
+            }
 
             // Отписка от событий
             for (int i = 0; i < appleList.Count; i++)
@@ -127,18 +154,29 @@ namespace TankWars
                 tankViewer[i].UnSetLocationChangedHandler(tankList[i]);
                 tankViewer[i].UnSetDirectionChangedHandler(tankList[i]);
             }
+            for (int i = 0; i < bulletList.Count; i++)
+            {
+                bulletViewer[i].UnSetLocationChangedHandler(bulletList[i]);
+                bulletViewer[i].UnSetDirectionChangedHandler(bulletList[i]);
+                bulletViewer[i].UnSetActiveChangedHandler(bulletList[i]);
+            }
 
             kolobokViewer.UnSetLocationChangedHandler(kolobokObject);
             kolobokViewer.UnSetDirectionChangedHandler(kolobokObject);
             kolobokObject.LifesLeftChanged -= KolobokLifesLeftChanged;
             kolobokViewer.UnSetGameEventsHandler(kolobokObject);
-
         }
 
         // Подготовить новую игру (для уже созданных объектов)
         public void InitNewGame()
         {
             if (kolobokObject == null) return;
+
+            // Деактивация пуль
+            foreach (Bullet blt in bulletList)
+            {
+                blt.Active = false;
+            }
 
             // Реинициализировать параметры колобка
             kolobokObject.LifesLeft = 3;
@@ -173,6 +211,13 @@ namespace TankWars
                 tmr.Start();
             }
 
+            // Запускаем таймеры пуль (только активных)
+            for (int i = 0; i < bulletTimer.Count; i++)
+            {
+                if (bulletList[i].Active == true)
+                    bulletTimer[i].Start();
+            }
+
             gameRunning = true;
         }
 
@@ -181,6 +226,12 @@ namespace TankWars
         {
             // Останавливаем таймер колобка
             kolobokTimer.Stop();
+
+            // Останавливаем таймеры пуль
+            foreach (Timer tmr in bulletTimer)
+            {
+                tmr.Stop();
+            }
 
             // Останавливаем таймеры танков
             foreach (Timer tmr in tankTimer)
@@ -218,46 +269,51 @@ namespace TankWars
             // Проверка пересечений
             List<GameObject> crossObjects = CheckAllCrossing(newLocation, kolobokObject.Size, kolobokObject);
 
-            // Пересечений нет
-            if (crossObjects.Count == 0)
-            {
-                kolobokObject.Location = newLocation;   // Переход на новую позицию
-                return;
-            }
-
-            // Проверка пересечений
+            // Анализ пересечений - Препядствия
             foreach (GameObject go in crossObjects)
             {
                 if (go is Wall)         // Колобок уперся в стену. Ничего не делаем
-                    break;
+                {
+                    return;
+                };
+                if (go is Tank)         // Колобок нарвался на танк
+                {
+                    kolobokObject.LifesLeft--;
+                    if (kolobokObject.LifesLeft > 0)
+                    {
+                        kolobokObject.Location = GetRandomLocation(ObjectSize.CommonSize);
+                    }
+                    return;
+                }
+                if (go is Bullet)       // Колобка подбила пуля 
+                {
+                    kolobokObject.LifesLeft--;
+                    if (kolobokObject.LifesLeft > 0)
+                    {
+                        kolobokObject.Location = GetRandomLocation(ObjectSize.CommonSize);
+                    }
+                    DeActivateBullet((Bullet)go); // Деактивировать пулю
+                    return;
+                    
+                }
+            }
+            // Анализ пересечений - Не пряпядствия
+            foreach (GameObject go in crossObjects)
+            {
                 if (go is Apple)        // Колобок съел яблоко
                 {
                     kolobokObject.ApplesCollected += Apple.GiveScore;
                     go.Location = GetRandomLocation(ObjectSize.CommonSize);
-                    kolobokObject.Location = newLocation;   // Переход на новую позицию
-                }
-                if (go is Tank)         // Колобок нарвался на танк
-                {
-                    kolobokObject.LifesLeft--;
-                    if (kolobokObject.LifesLeft <= 0) return;
-                    kolobokObject.Location = GetRandomLocation(ObjectSize.CommonSize);
-                    break;
-                }
-                if (go is Bullet)       // Колобка подбила пуля 
-                {
-                    kolobokObject.Location = newLocation;   // Переход на новую позицию
-                    kolobokObject.LifesLeft--;
-                    if (kolobokObject.LifesLeft <= 0) return;
-                    break;
-                    // !!! Уничтожить пулю
                 }
             }
+            kolobokObject.Location = newLocation;   // Переход на новую позицию
         }
 
         // Контроллер танка (выполняется по таймеру)
         void TankController(object sender, EventArgs e)
         {
-            int i = (int)(sender as Timer).Tag;
+            int i = tankTimer.IndexOf((sender as Timer));
+            if (tankList.Count < i) return;
             if (tankList[i] == null) return;
 
             // Предполагаемая новая позиция
@@ -273,45 +329,95 @@ namespace TankWars
             // Проверка пересечений
             List<GameObject> crossObjects = CheckAllCrossing(newLocation, tankList[i].Size, tankList[i]);
 
-            // Пересечений нет
-            if (crossObjects.Count == 0)
-            {
-                tankList[i].Location = newLocation;   // Переход на новую позицию
-                return;
-            }
-
-            // Проверка пересечений
+            // Анализ пересечений - Препядствия
             foreach (GameObject go in crossObjects)
             {
                 if (go is Wall)         // Танк уперся в стену. Меняем направление на случайное
                 {
                     tankList[i].Direction = (Direction)rnd.Next(4);
-                    break;
+                    return;
                 }
                 if (go is Tank)         // Танк столкнулся другим с танком. Меняем направление на случайное
                 {
                     tankList[i].Direction = (Direction)rnd.Next(4);
-                    break;
-                }
-                if (go is Kolobok)      // Танк задавил колобка
-                {
-                    kolobokObject.LifesLeft--;
-                    if (kolobokObject.LifesLeft <= 0) return;
-                    kolobokObject.Location = GetRandomLocation(ObjectSize.CommonSize);
-                    tankList[i].Location = newLocation; // Переход на новую позицию
+                    return;
                 }
                 if (go is Bullet)       // Танк был подбит пулей (неважно чьей)
                 {
                     kolobokObject.TanksKilled += Tank.GiveScore;    // Бонус колобку
                     tankList[i].Location = GetRandomLocation(ObjectSize.CommonSize);
-                    break;
-                    // !!! Уничтожить пулю
-                }
-                if (go is Apple)
-                {
-                    tankList[i].Location = newLocation; // Переход на новую позицию
+                    DeActivateBullet((Bullet)go); // Деактивировать пулю
+                    return;
                 }
             }
+            // Анализ пересечений - Не пряпядствия
+            foreach (GameObject go in crossObjects)
+            {
+                if (go is Kolobok)      // Танк задавил колобка
+                {
+                    kolobokObject.LifesLeft--;
+                    if (kolobokObject.LifesLeft > 0)
+                    {
+                        kolobokObject.Location = GetRandomLocation(ObjectSize.CommonSize);
+                    }
+                }
+            }
+            tankList[i].Location = newLocation; // Переход на новую позицию
+        }
+
+        // Контроллер пули (выполняется по таймеру)
+        void BulletController(object sender, EventArgs e)
+        {
+            int i = bulletTimer.IndexOf((sender as Timer));
+            if (bulletList.Count < i) return;
+            if (bulletList[i] == null) return;
+
+            // Предполагаемая новая позиция
+            Point newLocation = GetNewLocation(bulletList[i].Direction, bulletList[i].Location, 2);
+
+            // Проверка на выход за пределы карты
+            if ((CheckOutOfMap(newLocation, bulletList[i].Size) == true))
+            {
+                DeActivateBullet(bulletList[i]); // Деактивировать пулю
+                return;
+            }
+
+            // Проверка пересечений
+            List<GameObject> crossObjects = CheckAllCrossing(newLocation, bulletList[i].Size, bulletList[i]);
+
+            // Анализ пересечений - Препядствия
+            foreach (GameObject go in crossObjects)
+            {
+                if (go is Wall)                         // Пуля уперлась в стену. Уничтожаем
+                {
+                    DeActivateBullet(bulletList[i]);    // Деактивировать пулю
+                    return;
+                }
+                if (go is Bullet)                       // Пуля столкнулась с другой пулей. Уничтожить обе
+                {
+                    DeActivateBullet(bulletList[i]);    // Деактивировать пулю
+                    DeActivateBullet((Bullet)go);       // Деактивировать пулю
+                    return;
+                }
+                if (go is Tank)                         // Пуля подбила танк
+                {
+                    kolobokObject.TanksKilled += Tank.GiveScore;    // Бонус колобку
+                    go.Location = GetRandomLocation(ObjectSize.CommonSize);
+                    DeActivateBullet(bulletList[i]);    // Уничтожить пулю
+                    return;
+                }
+                if (go is Kolobok)                      // Пуля подбила колобка
+                {
+                    kolobokObject.LifesLeft--;
+                    DeActivateBullet(bulletList[i]);    // Деактивировать пулю
+                    if (kolobokObject.LifesLeft > 0)
+                    {
+                        kolobokObject.Location = GetRandomLocation(ObjectSize.CommonSize);
+                    }
+                    return;
+                }
+            }
+            bulletList[i].Location = newLocation; // Переход на новую позицию
         }
 
 
@@ -322,7 +428,7 @@ namespace TankWars
             Point loc;
             do // Повторяем пока есть пересечения с другими объектами или выход за пределы карты
             {
-                loc = new Point(rnd.Next(mapSize.Width - siz.Width), rnd.Next(mapSize.Height - siz.Height));
+                loc = new Point(rnd.Next(canvas.Size.Width - siz.Width), rnd.Next(canvas.Size.Height - siz.Height));
             } 
             while ((CheckAllCrossing(loc, siz).Count != 0) || (CheckOutOfMap(loc, siz) == true));
             return loc;
@@ -349,9 +455,9 @@ namespace TankWars
                 if (tnk.CheckCrossing(loc, siz))
                     result.Add(tnk);
             }
-            foreach (Bullet blt in bulletList)      // Пули
+            foreach (Bullet blt in bulletList)      // Пули (только активные)
             {
-                if (blt.CheckCrossing(loc, siz))
+                if ((blt.Active == true) && (blt.CheckCrossing(loc, siz)))
                     result.Add(blt);
             }
 
@@ -378,8 +484,8 @@ namespace TankWars
         bool CheckOutOfMap(Point loc, Size siz)
         {
             // Если объект полностью внутри карты
-            if ((loc.X >= 0) && (loc.X + siz.Width <= mapSize.Width) &&
-                (loc.Y >= 0) && (loc.Y + siz.Height <= mapSize.Height))
+            if ((loc.X >= 0) && (loc.X + siz.Width <= canvas.Size.Width) &&
+                (loc.Y >= 0) && (loc.Y + siz.Height <= canvas.Size.Height))
             {
                 return false;
             }
@@ -389,32 +495,85 @@ namespace TankWars
             }
         }
 
-        // Изменение позиции loc на 1 пиксель с учетом направления dir
+        // Изменение позиции loc на step пикселей с учетом направления dir
         // Без учета возможного пересечения с другими объектами
-        Point GetNewLocation(Direction dir, Point loc)
+        Point GetNewLocation(Direction dir, Point loc, byte step = 1)
         {
             switch (dir)
             {
                 case Direction.Left:
                     {
-                        return new Point(loc.X - 1, loc.Y);
+                        return new Point(loc.X - step, loc.Y);
                     }
                 case Direction.Right:
                     {
-                        return new Point(loc.X + 1, loc.Y);
+                        return new Point(loc.X + step, loc.Y);
                     }
                 case Direction.Bottom:
                     {
-                        return new Point(loc.X, loc.Y + 1);
+                        return new Point(loc.X, loc.Y + step);
                     }
                 case Direction.Top:
                 default:
                     {
-                        return new Point(loc.X, loc.Y - 1);
+                        return new Point(loc.X, loc.Y - step);
                     }
             }
         }
 
+
+        void ActivateBullet(MovingObject obj, int bulletIndex)
+        {
+            if (bulletList.Count < bulletIndex) return;
+            if (bulletList[bulletIndex] == null) return;
+            if (bulletList[bulletIndex].Active == true) return; // Пуля и так уже активна
+
+            Point bulletPos;    // Положение пули
+            byte acc = 10;      // Отступ от выстрелевшего объекта
+
+            // Рассчитываем положение пули, в зависимости от выстрелевшего такнка / колобка
+            switch (obj.Direction)
+            {
+                case Direction.Left:
+                    {
+                        bulletPos = new Point(obj.Location.X - acc, obj.Location.Y + obj.Size.Height / 2);
+                        break;
+                    }
+                case Direction.Right:
+                    {
+                        bulletPos = new Point(obj.Location.X + obj.Size.Width + acc, obj.Location.Y + obj.Size.Height / 2);
+                        break;
+                    }
+                case Direction.Bottom:
+                    {
+                        bulletPos = new Point(obj.Location.X + obj.Size.Width / 2, obj.Location.Y + obj.Size.Height + acc);
+                        break;
+                    }
+                case Direction.Top:
+                default:
+                    {
+                        bulletPos = new Point(obj.Location.X + obj.Size.Width / 2, obj.Location.Y - acc);
+                        break;
+                    }
+            }
+
+            // Активируем пулю
+            bulletList[bulletIndex].Location = bulletPos;
+            bulletList[bulletIndex].Direction = obj.Direction;
+            bulletList[bulletIndex].Active = true;
+            bulletTimer[bulletIndex].Start();
+        }
+
+        void DeActivateBullet(Bullet blt)
+        {
+            int bulletIndex = bulletList.IndexOf(blt);
+
+            if (bulletList.Count < bulletIndex) return;
+            if (bulletList[bulletIndex] == null) return;
+
+            bulletTimer[bulletIndex].Stop();
+            bulletList[bulletIndex].Active = false;
+        }
 
 
         // Реакция на нажатие кнопки: Управление колобком
@@ -423,6 +582,7 @@ namespace TankWars
             if (kolobokObject == null) return;
             switch (e.KeyCode)
             {
+                // Управление колобком
                 case Keys.Left:
                     {
                         kolobokObject.Direction = Direction.Left;
@@ -441,6 +601,12 @@ namespace TankWars
                 case Keys.Down:
                     {
                         kolobokObject.Direction = Direction.Bottom;
+                        break;
+                    }
+                // Стрельба
+                case Keys.Tab:
+                    {
+                        ActivateBullet(kolobokObject, 0);
                         break;
                     }
                 default:
