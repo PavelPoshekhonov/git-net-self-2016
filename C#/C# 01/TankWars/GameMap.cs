@@ -70,24 +70,17 @@ namespace TankWars
                 sizWall.Width = ObjectSize.CommonSize.Width;
                 sizWall.Height = ObjectSize.CommonSize.Height;
 
-                if ((i == 0) || (i == 2)) // Положение 
-                {
+                if ((i == 0) || (i == 2))   // Положение 
                     pntWall.X = Convert.ToInt32(i * xStep);
-                }
-                if ((i == 10)) // Положение 
-                {
+
+                if ((i == 10))              // Положение 
                     pntWall.X = Size.Width - ObjectSize.CommonSize.Width;
-                }
 
-                if ((i == 4) || (i == 6) ) // Центральные - выше
-                {
+                if ((i == 4) || (i == 6) )  // Центральные - выше
                     pntWall.Y = Convert.ToInt32(Size.Height / 2 - ObjectSize.CommonSize.Height * 1.5);
-                }
 
-                if ((i == 2) || (i == 8)) // Широкие
-                {
+                if ((i == 2) || (i == 8))   // Широкие
                     sizWall.Width = ObjectSize.CommonSize.Width * 2;
-                }
 
                 WallList.Add(new Wall(pntWall, sizWall));
             }

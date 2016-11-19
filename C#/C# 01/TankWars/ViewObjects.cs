@@ -211,6 +211,7 @@ namespace TankWars
                         objectBox.Image = Resources.Kolobok_T;
                         break;
                     }
+                case Direction.Bottom:
                 default:
                     {
                         objectBox.Image = Resources.Kolobok_B;
@@ -251,6 +252,7 @@ namespace TankWars
                         objectBox.Image = Resources.Tank_T;
                         break;
                     }
+                case Direction.Bottom:
                 default:
                     {
                         objectBox.Image = Resources.Tank_B;
@@ -293,13 +295,29 @@ namespace TankWars
 
             objectBox.Size = obj.Size;
 
-            if (((obj as MovingObject).Direction == Direction.Left) || ((obj as MovingObject).Direction == Direction.Right))
+            switch ((obj as MovingObject).Direction)
             {
-                objectBox.Image = Resources.Bullet_H;
-            }
-            else
-            {
-                objectBox.Image = Resources.Bullet_V;
+                case Direction.Left:
+                    {
+                        objectBox.Image = Resources.Bullet_L;
+                        break;
+                    }
+                case Direction.Right:
+                    {
+                        objectBox.Image = Resources.Bullet_R;
+                        break;
+                    }
+                case Direction.Top:
+                    {
+                        objectBox.Image = Resources.Bullet_T;
+                        break;
+                    }
+                case Direction.Bottom:
+                default:
+                    {
+                        objectBox.Image = Resources.Bullet_B;
+                        break;
+                    }
             }
         }
     }

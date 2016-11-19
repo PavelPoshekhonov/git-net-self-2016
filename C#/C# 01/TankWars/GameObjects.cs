@@ -18,8 +18,8 @@ namespace TankWars
         // Размеры Стены, Яблока, Колобка, Танка
         public static readonly Size CommonSize = new Size(28, 28);
         // Размеры Пули
-        public static readonly Size BulletH = new Size(8, 4);
-        public static readonly Size BulletV = new Size(4, 8);
+        public static readonly Size BulletH = new Size(10, 4);
+        public static readonly Size BulletV = new Size(4, 10);
     }
 
 
@@ -71,13 +71,9 @@ namespace TankWars
             if ((Location.Y + Size.Height >= loc.Y) && (Location.Y <= loc.Y + siz.Height)) yCross = true;
 
             if (xCross && yCross)
-            {
                 return true;
-            }
             else
-            {
                 return false;
-            }
         }
     }
 
@@ -242,6 +238,30 @@ namespace TankWars
                 Size = ObjectSize.BulletH;
             else
                 Size = ObjectSize.BulletV;
+        }
+
+        // Рассчитать положение пули, в зависимости от положения выстрелевшего танка / колобка
+        public static Point CalcLocation(MovingObject obj)
+        {
+            byte acc = 2;       // Отступ от выстрелевшего объекта
+
+            switch (obj.Direction)
+            {
+                case Direction.Left:
+                        return new Point(obj.Location.X - ObjectSize.BulletH.Width - acc,
+                                         obj.Location.Y + obj.Size.Height / 2 - ObjectSize.BulletH.Height / 2);
+                case Direction.Right:
+                        return new Point(obj.Location.X + obj.Size.Width + acc,
+                                         obj.Location.Y + obj.Size.Height / 2 - ObjectSize.BulletH.Height / 2);
+                case Direction.Bottom:
+                        return new Point(obj.Location.X + obj.Size.Width / 2 - ObjectSize.BulletV.Width / 2,
+                                         obj.Location.Y + obj.Size.Height + acc);
+                case Direction.Top:
+                default:
+                        return new Point(obj.Location.X + obj.Size.Width / 2 - ObjectSize.BulletV.Width / 2,
+                                         obj.Location.Y - ObjectSize.BulletV.Height - acc);
+            }
+
         }
     }
 }

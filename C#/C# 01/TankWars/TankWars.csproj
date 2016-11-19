@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -42,7 +42,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>Test\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -114,9 +114,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Bullet_H.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Apple.png" />
   </ItemGroup>
   <ItemGroup>
@@ -144,10 +141,19 @@
     <Resource Include="Resources\Tank_T.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Bullet_V.png" />
+    <Resource Include="Resources\Wall.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Wall.png" />
+    <Resource Include="Resources\Bullet_B.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Bullet_L.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Bullet_R.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Bullet_T.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

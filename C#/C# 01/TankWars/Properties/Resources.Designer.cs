@@ -73,9 +73,9 @@ namespace TankWars.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Bullet_H {
+        internal static System.Drawing.Bitmap Bullet_B {
             get {
-                object obj = ResourceManager.GetObject("Bullet_H", resourceCulture);
+                object obj = ResourceManager.GetObject("Bullet_B", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,29 @@ namespace TankWars.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Bullet_V {
+        internal static System.Drawing.Bitmap Bullet_L {
             get {
-                object obj = ResourceManager.GetObject("Bullet_V", resourceCulture);
+                object obj = ResourceManager.GetObject("Bullet_L", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bullet_R {
+            get {
+                object obj = ResourceManager.GetObject("Bullet_R", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bullet_T {
+            get {
+                object obj = ResourceManager.GetObject("Bullet_T", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

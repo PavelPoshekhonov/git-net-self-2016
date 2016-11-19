@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TankWars
@@ -16,10 +10,10 @@ namespace TankWars
 
         public FormMain(string[] args)
         {
-            int mapWidth = 800;
-            int mapHeight = 600;
-            int tankAmount = 1;
-            int appleAmount = 1;
+            int mapWidth = 600;
+            int mapHeight = 500;
+            int tankAmount = 5;
+            int appleAmount = 5;
             int moveDelay = 10;
 
             InitializeComponent();
@@ -32,14 +26,24 @@ namespace TankWars
                 {
                     int.TryParse(split[0], out mapWidth);
                     int.TryParse(split[1], out mapHeight);
+                    mapWidth = Math.Min(mapWidth, 1800);
+                    mapHeight = Math.Min(mapHeight, 1000);
+                    mapWidth = Math.Max(mapWidth, 500);
+                    mapHeight = Math.Max(mapHeight, 500);
                 }
             }
 
             if (args.Length >= 2)   // Количество танков на поле
+            {
                 int.TryParse(args[1], out tankAmount);
+                tankAmount = Math.Min(tankAmount, 20);
+            }
 
             if (args.Length >= 3)   // Количество яблок на поле
+            {  
                 int.TryParse(args[2], out appleAmount);
+                appleAmount = Math.Min(appleAmount, 20);
+            }
 
             if (args.Length >= 3)   // Скорость передвижения объектов (задается для всех объектов сразу)
             {
@@ -57,6 +61,7 @@ namespace TankWars
                             moveDelay = 25;
                             break;
                         }
+                    case 3:
                     default:
                         {
                             moveDelay = 10;
@@ -81,6 +86,7 @@ namespace TankWars
 
         private void btNewGame_Click(object sender, EventArgs e)
         {
+            pnMap.Select(); // Убираем фокус с кнопки
             GameController.Pause();
             GameController.InitNewGame();
             GameController.Run();
@@ -88,6 +94,7 @@ namespace TankWars
 
         private void btPause_Click(object sender, EventArgs e)
         {
+            pnMap.Select(); // Убираем фокус с кнопки
             if (GameController.GameRunning == true)
             {
                 GameController.Pause();
@@ -109,7 +116,7 @@ namespace TankWars
                 case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
-                case Keys.Tab:
+                case Keys.Space:
                     e.IsInputKey = true;
                     break;
             }
