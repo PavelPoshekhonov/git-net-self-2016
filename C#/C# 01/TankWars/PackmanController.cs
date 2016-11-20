@@ -22,6 +22,11 @@ namespace TankWars
         List<Tank> tankList = new List<Tank>();
         List<Bullet> bulletList = new List<Bullet>();
 
+        public Kolobok KolobokObject{ get {return kolobokObject; } }
+        List<Apple> AppleList { get {return appleList; } }
+        List<Tank> TankList { get { return tankList; } }
+        List<Bullet> BulletList { get { return bulletList; } }
+
         // Отображение игровых объектов
         KolobokView kolobokViewer;
         List<AppleView> appleViewer = new List<AppleView>();

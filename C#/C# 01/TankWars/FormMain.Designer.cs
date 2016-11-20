@@ -40,6 +40,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnHelp = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
+            this.btStat = new System.Windows.Forms.Button();
             this.pnBottom.SuspendLayout();
             this.pnHelp.SuspendLayout();
             this.SuspendLayout();
@@ -49,12 +50,13 @@
             this.pnMap.BackColor = System.Drawing.Color.Black;
             this.pnMap.Location = new System.Drawing.Point(12, 12);
             this.pnMap.Name = "pnMap";
-            this.pnMap.Size = new System.Drawing.Size(500, 500);
+            this.pnMap.Size = new System.Drawing.Size(513, 318);
             this.pnMap.TabIndex = 0;
             // 
             // pnBottom
             // 
             this.pnBottom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnBottom.Controls.Add(this.btStat);
             this.pnBottom.Controls.Add(this.btPause);
             this.pnBottom.Controls.Add(this.lbTanks);
             this.pnBottom.Controls.Add(this.label3);
@@ -63,9 +65,9 @@
             this.pnBottom.Controls.Add(this.label2);
             this.pnBottom.Controls.Add(this.lbLifes);
             this.pnBottom.Controls.Add(this.label1);
-            this.pnBottom.Location = new System.Drawing.Point(12, 528);
+            this.pnBottom.Location = new System.Drawing.Point(12, 346);
             this.pnBottom.Name = "pnBottom";
-            this.pnBottom.Size = new System.Drawing.Size(500, 31);
+            this.pnBottom.Size = new System.Drawing.Size(513, 31);
             this.pnBottom.TabIndex = 1;
             // 
             // btPause
@@ -83,7 +85,7 @@
             // lbTanks
             // 
             this.lbTanks.AutoSize = true;
-            this.lbTanks.Location = new System.Drawing.Point(443, 8);
+            this.lbTanks.Location = new System.Drawing.Point(436, 8);
             this.lbTanks.Name = "lbTanks";
             this.lbTanks.Size = new System.Drawing.Size(22, 13);
             this.lbTanks.TabIndex = 7;
@@ -92,7 +94,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(400, 8);
+            this.label3.Location = new System.Drawing.Point(397, 8);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(37, 13);
             this.label3.TabIndex = 6;
@@ -113,7 +115,7 @@
             // lbApples
             // 
             this.lbApples.AutoSize = true;
-            this.lbApples.Location = new System.Drawing.Point(345, 8);
+            this.lbApples.Location = new System.Drawing.Point(362, 8);
             this.lbApples.Name = "lbApples";
             this.lbApples.Size = new System.Drawing.Size(22, 13);
             this.lbApples.TabIndex = 4;
@@ -122,7 +124,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(300, 8);
+            this.label2.Location = new System.Drawing.Point(321, 8);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 13);
             this.label2.TabIndex = 3;
@@ -132,7 +134,7 @@
             // 
             this.lbLifes.AutoSize = true;
             this.lbLifes.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbLifes.Location = new System.Drawing.Point(235, 8);
+            this.lbLifes.Location = new System.Drawing.Point(286, 8);
             this.lbLifes.Name = "lbLifes";
             this.lbLifes.Size = new System.Drawing.Size(22, 13);
             this.lbLifes.TabIndex = 2;
@@ -141,7 +143,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(200, 8);
+            this.label1.Location = new System.Drawing.Point(255, 8);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 1;
@@ -151,9 +153,9 @@
             // 
             this.pnHelp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnHelp.Controls.Add(this.label4);
-            this.pnHelp.Location = new System.Drawing.Point(12, 565);
+            this.pnHelp.Location = new System.Drawing.Point(12, 383);
             this.pnHelp.Name = "pnHelp";
-            this.pnHelp.Size = new System.Drawing.Size(500, 31);
+            this.pnHelp.Size = new System.Drawing.Size(513, 31);
             this.pnHelp.TabIndex = 2;
             // 
             // label4
@@ -165,9 +167,21 @@
             this.label4.TabIndex = 2;
             this.label4.Text = "<Arrows> - Change direction. <Space> - Fire. <F2> - New game.";
             // 
+            // btStat
+            // 
+            this.btStat.Location = new System.Drawing.Point(165, 3);
+            this.btStat.Name = "btStat";
+            this.btStat.Size = new System.Drawing.Size(75, 23);
+            this.btStat.TabIndex = 9;
+            this.btStat.TabStop = false;
+            this.btStat.Text = "Statistics";
+            this.btStat.UseVisualStyleBackColor = true;
+            this.btStat.Click += new System.EventHandler(this.btStat_Click);
+            this.btStat.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.bt_PreviewKeyDown);
+            // 
             // FormMain
             // 
-            this.ClientSize = new System.Drawing.Size(524, 606);
+            this.ClientSize = new System.Drawing.Size(537, 424);
             this.Controls.Add(this.pnHelp);
             this.Controls.Add(this.pnBottom);
             this.Controls.Add(this.pnMap);
@@ -199,6 +213,7 @@
         private System.Windows.Forms.Button btPause;
         private System.Windows.Forms.Panel pnHelp;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btStat;
     }
 }
 

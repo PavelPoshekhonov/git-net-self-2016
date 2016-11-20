@@ -7,16 +7,18 @@ namespace TankWars
     public partial class FormMain : Form
     {
         public PackmanController GameController;
+        FormStat frm = new FormStat(); // Окно статистики
 
         public FormMain(string[] args)
         {
+            InitializeComponent();
+
             int mapWidth = 600;
             int mapHeight = 500;
             int tankAmount = 5;
             int appleAmount = 5;
             int moveDelay = 10;
 
-            InitializeComponent();
 
             // Разбор аргументов командной строки
             if (args.Length >= 1)   // Размеры игрового поля (ширина и высота)
@@ -86,6 +88,7 @@ namespace TankWars
             GameController.Run();
         }
 
+        // Новая игра
         private void btNewGame_Click(object sender, EventArgs e)
         {
             pnMap.Select(); // Убираем фокус с кнопки
@@ -94,6 +97,7 @@ namespace TankWars
             GameController.Run();
         }
 
+        // Пауза
         private void btPause_Click(object sender, EventArgs e)
         {
             pnMap.Select(); // Убираем фокус с кнопки
@@ -107,6 +111,14 @@ namespace TankWars
                 GameController.Run();
                 btPause.Text = "Pause";
             }
+        }
+
+        // Статистика
+        private void btStat_Click(object sender, EventArgs e)
+        {
+            pnMap.Select(); // Убираем фокус с кнопки
+            frm.FormInit(GameController);
+            frm.Show();
         }
 
         // Для проталкивания событий нажатия на кнопки-стрелки
@@ -128,5 +140,6 @@ namespace TankWars
             KeyDown -= GameController.KeyDown; // Обработчик события нажатия на кнопку
             GameController.Dispose();
         }
+
     }
 }

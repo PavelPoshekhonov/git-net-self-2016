@@ -34,6 +34,7 @@ namespace TankWars
         }
 
         // Поля
+        string Name { get; set; } = "Game Object";      // Имя объектка
         Size size;
         public Size Size                                // Размер объекта
         {
