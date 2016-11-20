@@ -74,7 +74,9 @@ namespace TankWars
             pnMap.Size = new Size(mapWidth, mapHeight);
             pnBottom.Size = new Size(mapWidth, pnBottom.Size.Height);
             pnBottom.Location = new Point(pnBottom.Location.X, mapHeight + 28);
-            Size = new Size(mapWidth + 30, mapHeight + 106);
+            pnHelp.Size = new Size(mapWidth, pnBottom.Size.Height);
+            pnHelp.Location = new Point(pnBottom.Location.X, mapHeight + 65);
+            Size = new Size(mapWidth + 40, mapHeight + 144);
 
             // Создать контроллер игры
             GameController = new PackmanController(pnMap, lbLifes, lbApples, lbTanks, tankAmount, appleAmount, moveDelay);
@@ -116,7 +118,6 @@ namespace TankWars
                 case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
-                case Keys.Space:
                     e.IsInputKey = true;
                     break;
             }

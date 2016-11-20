@@ -213,7 +213,7 @@ namespace TankWars
             // Запускаем таймеры пуль (только активных)
             for (int i = 0; i < bulletTimer.Count; i++)
             {
-                if (bulletList[i].Active == true)
+                if ((bulletList[i] != null) && (bulletTimer[i] != null) && (bulletList[i].Active == true))
                     bulletTimer[i].Start();
             }
 
@@ -489,13 +489,9 @@ namespace TankWars
             // Если объект полностью внутри карты
             if ((loc.X >= 0) && (loc.X + siz.Width <= canvas.Size.Width) &&
                 (loc.Y >= 0) && (loc.Y + siz.Height <= canvas.Size.Height))
-            {
                 return false;
-            }
             else
-            {
                 return true;
-            }
         }
 
         // Изменение позиции loc на step пикселей с учетом направления dir
@@ -505,22 +501,14 @@ namespace TankWars
             switch (dir)
             {
                 case Direction.Left:
-                    {
-                        return new Point(loc.X - step, loc.Y);
-                    }
+                    return new Point(loc.X - step, loc.Y);
                 case Direction.Right:
-                    {
-                        return new Point(loc.X + step, loc.Y);
-                    }
+                    return new Point(loc.X + step, loc.Y);
                 case Direction.Bottom:
-                    {
-                        return new Point(loc.X, loc.Y + step);
-                    }
+                    return new Point(loc.X, loc.Y + step);
                 case Direction.Top:
                 default:
-                    {
-                        return new Point(loc.X, loc.Y - step);
-                    }
+                    return new Point(loc.X, loc.Y - step);
             }
         }
 
@@ -595,6 +583,14 @@ namespace TankWars
         // Реакция на нажатие кнопки: Управление колобком
         public void KeyDown(object sender, KeyEventArgs e)
         {
+            // Новая игра
+            if (e.KeyCode == Keys.F2)
+            {
+                Pause();
+                InitNewGame();
+                Run();
+            }
+
             if (kolobokObject == null) return;
             // Играет только живой колобок
             if (kolobokObject.LifesLeft <= 0) return;

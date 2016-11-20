@@ -197,7 +197,7 @@ namespace TankWars
     }
 
     // Класс двигающегося игрового объекта: Пуля
-    public class Bullet : MovingObject
+    public class Bullet : MovingObject, IDisposable
     {
         // События
         public event EventHandler ActiveChanged;        // Запуск / Остановка пули
@@ -228,7 +228,11 @@ namespace TankWars
         }
 
         // Деструктор
-        // !!! Отмена обработчика
+        public void Dispose()
+        {
+            // Отмена обработчика
+            this.DirectionChanged -= ThisDirectionChanged;
+        }
 
         // Обработчик события "Изменение направления"
         public void ThisDirectionChanged(object sender, EventArgs e)

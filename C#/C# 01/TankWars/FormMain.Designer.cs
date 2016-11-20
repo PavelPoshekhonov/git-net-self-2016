@@ -38,7 +38,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lbLifes = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.pnHelp = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.pnBottom.SuspendLayout();
+            this.pnHelp.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnMap
@@ -144,9 +147,28 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Lifes";
             // 
+            // pnHelp
+            // 
+            this.pnHelp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnHelp.Controls.Add(this.label4);
+            this.pnHelp.Location = new System.Drawing.Point(12, 565);
+            this.pnHelp.Name = "pnHelp";
+            this.pnHelp.Size = new System.Drawing.Size(500, 31);
+            this.pnHelp.TabIndex = 2;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 8);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(308, 13);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "<Arrows> - Change direction. <Space> - Fire. <F2> - New game.";
+            // 
             // FormMain
             // 
-            this.ClientSize = new System.Drawing.Size(524, 571);
+            this.ClientSize = new System.Drawing.Size(524, 606);
+            this.Controls.Add(this.pnHelp);
             this.Controls.Add(this.pnBottom);
             this.Controls.Add(this.pnMap);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -158,6 +180,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.pnBottom.ResumeLayout(false);
             this.pnBottom.PerformLayout();
+            this.pnHelp.ResumeLayout(false);
+            this.pnHelp.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -173,6 +197,8 @@
         private System.Windows.Forms.Label lbTanks;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btPause;
+        private System.Windows.Forms.Panel pnHelp;
+        private System.Windows.Forms.Label label4;
     }
 }
 
