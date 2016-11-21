@@ -42,6 +42,8 @@ namespace TankWars
 
             xStep = Size.Width / 13;
 
+            WallList.Clear();
+
             // Создаем вертикальные стены
             for (int i = 1; i <= 12; i += 2)
             {

@@ -21,7 +21,16 @@ namespace TankWars
             foreach (Wall wll in gameMap.WallList)
             {
                 WallViewList.Add(new WallView(canvas));
-                WallViewList.Last().SetLocationChangedHandler(wll);
+                WallViewList.Last().SetEventHandlers(wll);
+            }
+        }
+
+        // Отписаться от событий обновления
+        public void CloseMap(GameMap gameMap)
+        {
+            for (int i = 0; i < gameMap.WallList.Count; i++)
+            {
+                WallViewList[i].UnSetEventHandlers(gameMap.WallList[i]);
             }
         }
     }

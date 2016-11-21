@@ -25,7 +25,7 @@ namespace TankWars
         }
 
         // Установить обработчик события "Изменение положения"
-        public void SetLocationChangedHandler(GameObject obj)
+        public virtual void SetEventHandlers(GameObject obj)
         {
             obj.LocationChanged += ObjectLocationChanged;
             SelectImage(obj); // Выбрать картинку объекта
@@ -33,7 +33,7 @@ namespace TankWars
         }
 
         // Очистить обработчик события "Изменение положения"
-        public void UnSetLocationChangedHandler(GameObject obj)
+        public virtual void UnSetEventHandlers(GameObject obj)
         {
             obj.LocationChanged -= ObjectLocationChanged;
         }
@@ -97,16 +97,24 @@ namespace TankWars
         public MovingObjectView(Control canvas) : base(canvas) { }
 
         // Установить обработчик события "Изменение направления"
-        public void SetDirectionChangedHandler(MovingObject obj)
+        public override void SetEventHandlers(GameObject obj)
         {
-            obj.DirectionChanged += ObjectDirectionChanged;
+            base.SetEventHandlers(obj);
+
+            if ((obj is MovingObject) == false) return;
+
+            (obj as MovingObject).DirectionChanged += ObjectDirectionChanged;
             ObjectDirectionChanged(obj, EventArgs.Empty); // Принудительное обновление
         }
 
         // Очистить обработчик события "Изменение направления"
-        public void UnSetDirectionChangedHandler(MovingObject obj)
+        public override void UnSetEventHandlers(GameObject obj)
         {
-            obj.DirectionChanged -= ObjectDirectionChanged;
+            base.UnSetEventHandlers(obj);
+
+            if ((obj is MovingObject) == false) return;
+
+            (obj as MovingObject).DirectionChanged -= ObjectDirectionChanged;
         }
 
         // Обработчик события "Изменение направления"
@@ -138,25 +146,34 @@ namespace TankWars
         }
 
         // Установить обработчики событий игры
-        public void SetGameEventsHandler(Kolobok obj)
+        public override void SetEventHandlers(GameObject obj)
         {
-            obj.LifesLeftChanged += KolobokLifesLeftChanged;
+            base.SetEventHandlers(obj);
+
+            if ((obj is Kolobok) == false) return;
+
+            (obj as Kolobok).LifesLeftChanged += KolobokLifesLeftChanged;
             KolobokLifesLeftChanged(obj, EventArgs.Empty);          // Принудительное обновление
 
-            obj.ApplesCollectedChanged += KolobokApplesCollectedChanged;
+            (obj as Kolobok).ApplesCollectedChanged += KolobokApplesCollectedChanged;
             KolobokApplesCollectedChanged(obj, EventArgs.Empty);    // Принудительное обновление
 
-            obj.TanksKilledChanged += KolobokTanksKilledChanged;
+            (obj as Kolobok).TanksKilledChanged += KolobokTanksKilledChanged;
             KolobokTanksKilledChanged(obj, EventArgs.Empty);        // Принудительное обновление
         }
 
-        // Очистить обработчик событий игры
-        public void UnSetGameEventsHandler(Kolobok obj)
+        // Очистить обработчики событий игры
+        public override void UnSetEventHandlers(GameObject obj)
         {
-            obj.LifesLeftChanged -= KolobokLifesLeftChanged;
-            obj.ApplesCollectedChanged -= KolobokApplesCollectedChanged;
-            obj.TanksKilledChanged -= KolobokTanksKilledChanged;
+            base.UnSetEventHandlers(obj);
+
+            if ((obj is Kolobok) == false) return;
+
+            (obj as Kolobok).LifesLeftChanged -= KolobokLifesLeftChanged;
+            (obj as Kolobok).ApplesCollectedChanged -= KolobokApplesCollectedChanged;
+            (obj as Kolobok).TanksKilledChanged -= KolobokTanksKilledChanged;
         }
+
 
         // Обработчик события колобка "Изменение оставшихся жизней"
         public void KolobokLifesLeftChanged(object sender, EventArgs e)
@@ -266,16 +283,24 @@ namespace TankWars
         public BulletView(Control canvas) : base(canvas) { }
 
         // Установить обработчик события "Изменение активности"
-        public void SetActiveChangedHandler(Bullet obj)
+        public override void SetEventHandlers(GameObject obj)
         {
-            obj.ActiveChanged += ObjectActiveChanged;
+            base.SetEventHandlers(obj);
+
+            if ((obj is Bullet) == false) return;
+
+            (obj as Bullet).ActiveChanged += ObjectActiveChanged;
             ObjectActiveChanged(obj, EventArgs.Empty); // Принудительное обновление
         }
 
         // Очистить обработчик события "Изменение активности"
-        public void UnSetActiveChangedHandler(Bullet obj)
+        public override void UnSetEventHandlers(GameObject obj)
         {
-            obj.ActiveChanged -= ObjectActiveChanged;
+            base.UnSetEventHandlers(obj);
+
+            if ((obj is Bullet) == false) return;
+
+            (obj as Bullet).ActiveChanged -= ObjectActiveChanged;
         }
 
         // Обработчик события "Изменение активности"

@@ -76,9 +76,7 @@ namespace TankWars
                 // Создаем отображение пули
                 bulletViewer.Add(new BulletView(canvas));
                 // Назначаем обработчики событий "Изменение положения", "Изменение направления", "Изменение активности"
-                bulletViewer[i].SetLocationChangedHandler(bulletList[i]);
-                bulletViewer[i].SetDirectionChangedHandler(bulletList[i]);
-                bulletViewer[i].SetActiveChangedHandler(bulletList[i]);
+                bulletViewer[i].SetEventHandlers(bulletList[i]);
             }
 
             for (int i = 0; i < tankAmount; i++)
@@ -89,8 +87,7 @@ namespace TankWars
                 // Создаем отображение танка
                 tankViewer.Add(new TankView(canvas));
                 // Назначаем обработчики событий "Изменение положения", "Изменение направления"
-                tankViewer[i].SetLocationChangedHandler(tankList[i]);
-                tankViewer[i].SetDirectionChangedHandler(tankList[i]);
+                tankViewer[i].SetEventHandlers(tankList[i]);
             }
 
             // Создаем колобка
@@ -98,11 +95,8 @@ namespace TankWars
             kolobokObject.Name = "Колобок";
             // Создаем отображение колобка
             kolobokViewer = new KolobokView(canvas, lbLf, lbAp, lbTn);
-            // Назначаем обработчики событий "Изменение положения", "Изменение направления"
-            kolobokViewer.SetLocationChangedHandler(kolobokObject);
-            kolobokViewer.SetDirectionChangedHandler(kolobokObject);
-            // Назначаем обработчики событий игры
-            kolobokViewer.SetGameEventsHandler(kolobokObject);
+            // Назначаем обработчики событий "Изменение положения", "Изменение направления", Обработчики событий игры
+            kolobokViewer.SetEventHandlers(kolobokObject);
             // Контроль события колобка "Изменение оставшихся жизней"
             kolobokObject.LifesLeftChanged += KolobokLifesLeftChanged;
 
@@ -114,7 +108,7 @@ namespace TankWars
                 // Создаем отображение яблока
                 appleViewer.Add(new AppleView(canvas));
                 // Назначаем обработчик события "Изменение положения"
-                appleViewer[i].SetLocationChangedHandler(appleList[i]);
+                appleViewer[i].SetEventHandlers(appleList[i]);
             }
             
 
@@ -158,24 +152,21 @@ namespace TankWars
             // Отписка от событий
             for (int i = 0; i < appleList.Count; i++)
             {
-                appleViewer[i].UnSetLocationChangedHandler(appleList[i]);
+                appleViewer[i].UnSetEventHandlers(appleList[i]);
             }
             for (int i = 0; i < tankList.Count; i++)
             {
-                tankViewer[i].UnSetLocationChangedHandler(tankList[i]);
-                tankViewer[i].UnSetDirectionChangedHandler(tankList[i]);
+                tankViewer[i].UnSetEventHandlers(tankList[i]);
             }
             for (int i = 0; i < bulletList.Count; i++)
             {
-                bulletViewer[i].UnSetLocationChangedHandler(bulletList[i]);
-                bulletViewer[i].UnSetDirectionChangedHandler(bulletList[i]);
-                bulletViewer[i].UnSetActiveChangedHandler(bulletList[i]);
+                bulletViewer[i].UnSetEventHandlers(bulletList[i]);
             }
 
-            kolobokViewer.UnSetLocationChangedHandler(kolobokObject);
-            kolobokViewer.UnSetDirectionChangedHandler(kolobokObject);
+            kolobokViewer.UnSetEventHandlers(kolobokObject);
             kolobokObject.LifesLeftChanged -= KolobokLifesLeftChanged;
-            kolobokViewer.UnSetGameEventsHandler(kolobokObject);
+
+            viewMap.CloseMap(gameMap);
         }
 
         // Подготовить новую игру (для уже созданных объектов)

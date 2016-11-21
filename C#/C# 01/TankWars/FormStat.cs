@@ -9,7 +9,7 @@ namespace TankWars
         PackmanController controller;
 
         // Отображение игровых объектов в таблице
-        List<GameObjectViewTable> objectViewerTable;
+        List<GameObjectViewTable> objectViewerTable = new List<GameObjectViewTable>();
 
         // Конструктор
         public FormStat()
@@ -29,7 +29,7 @@ namespace TankWars
             dgvStat.Height =  (dgvStat.RowCount + 1) * dgvStat.RowTemplate.Height - 2;
             Height = dgvStat.Height +  51;
 
-            objectViewerTable = new List<GameObjectViewTable>();
+            objectViewerTable.Clear();
 
             // Создаем отображение игровых объектов в таблице
             objectViewerTable.Add(new GameObjectViewTable(dgvStat));
@@ -85,8 +85,6 @@ namespace TankWars
                 // Отменяем обработчик события "Изменение положения"
                 objectViewerTable[objCount++].UnSetEventHandlers(blt);
             }
-
-            objectViewerTable.Clear();
         }
     }
 }
