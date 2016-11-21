@@ -17,7 +17,7 @@ namespace TankWars
             InitializeComponent();
         }
 
-        // Инициализация формы
+        // Инициализация окна
         public void FormInit(PackmanController pc)
         {
             controller = pc;    // Сохраняем ссылку на контроллер
@@ -61,6 +61,8 @@ namespace TankWars
             }
         }
 
+
+        // Закрытие окна
         private void FormStat_FormClosing(object sender, FormClosingEventArgs e)
         {
             int objCount = 0;

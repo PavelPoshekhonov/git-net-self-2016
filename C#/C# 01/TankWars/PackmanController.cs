@@ -586,21 +586,13 @@ namespace TankWars
         // Реакция на нажатие кнопки: Управление колобком
         public void KeyDown(object sender, KeyEventArgs e)
         {
-            // Новая игра
-            if (e.KeyCode == Keys.F2)
-            {
-                Pause();
-                InitNewGame();
-                Run();
-            }
-
             if (kolobokObject == null) return;
             // Играет только живой колобок
             if (kolobokObject.LifesLeft <= 0) return;
 
             if (GameRunning == false) return;
 
-                switch (e.KeyCode)
+            switch (e.KeyCode)
             {
                 // Управление колобком
                 case Keys.Left:

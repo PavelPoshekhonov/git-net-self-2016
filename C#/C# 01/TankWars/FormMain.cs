@@ -88,6 +88,7 @@ namespace TankWars
             GameController.Run();
         }
 
+
         // Новая игра
         private void btNewGame_Click(object sender, EventArgs e)
         {
@@ -125,10 +126,39 @@ namespace TankWars
             }
             frm.Show();
 
-            Activate();// Вернуться на главную форму
+            Activate();// Вернуться на главное окно
             pnMap.Select(); // Убираем фокус с кнопки
         }
 
+
+        // Горячие клавиши
+        private void FormMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                // Новая игра
+                case Keys.F2:
+                    {
+                        btNewGame.PerformClick();
+                        break;
+                    }
+                // Пауза
+                case Keys.P:
+                    {
+                        btPause.PerformClick();
+                        break;
+                    }
+                // Статистика
+                case Keys.S:
+                    {
+                        btStat.PerformClick();
+                        break;
+                    }
+            }
+        }
+
+        
+        // Закрытие окна
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             KeyDown -= GameController.KeyDown; // Обработчик события нажатия на кнопку

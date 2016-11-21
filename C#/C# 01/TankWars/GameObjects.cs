@@ -253,18 +253,18 @@ namespace TankWars
             switch (obj.Direction)
             {
                 case Direction.Left:
-                        return new Point(obj.Location.X - ObjectSize.BulletH.Width - acc,
-                                         obj.Location.Y + obj.Size.Height / 2 - ObjectSize.BulletH.Height / 2);
+                    return new Point(obj.Location.X - ObjectSize.BulletH.Width - acc,
+                                     obj.Location.Y + obj.Size.Height / 2 - ObjectSize.BulletH.Height / 2);
                 case Direction.Right:
-                        return new Point(obj.Location.X + obj.Size.Width + acc,
-                                         obj.Location.Y + obj.Size.Height / 2 - ObjectSize.BulletH.Height / 2);
+                    return new Point(obj.Location.X + obj.Size.Width + acc,
+                                     obj.Location.Y + obj.Size.Height / 2 - ObjectSize.BulletH.Height / 2);
                 case Direction.Bottom:
-                        return new Point(obj.Location.X + obj.Size.Width / 2 - ObjectSize.BulletV.Width / 2,
-                                         obj.Location.Y + obj.Size.Height + acc);
+                    return new Point(obj.Location.X + obj.Size.Width / 2 - ObjectSize.BulletV.Width / 2,
+                                     obj.Location.Y + obj.Size.Height + acc);
                 case Direction.Top:
                 default:
-                        return new Point(obj.Location.X + obj.Size.Width / 2 - ObjectSize.BulletV.Width / 2,
-                                         obj.Location.Y - ObjectSize.BulletV.Height - acc);
+                    return new Point(obj.Location.X + obj.Size.Width / 2 - ObjectSize.BulletV.Width / 2,
+                                     obj.Location.Y - ObjectSize.BulletV.Height - acc);
             }
 
         }

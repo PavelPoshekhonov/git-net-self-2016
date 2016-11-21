@@ -172,9 +172,10 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(3, 8);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(308, 13);
+            this.label4.Size = new System.Drawing.Size(448, 13);
             this.label4.TabIndex = 2;
-            this.label4.Text = "<Arrows> - Change direction. <Space> - Fire. <F2> - New game.";
+            this.label4.Text = "<Arrows> - Change direction. <Space> - Fire. <F2> - New game. <P> - Pause. <S> - " +
+    "Statistics.";
             // 
             // FormMain
             // 
@@ -189,6 +190,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tank Wars";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormMain_KeyDown);
             this.pnBottom.ResumeLayout(false);
             this.pnBottom.PerformLayout();
             this.pnHelp.ResumeLayout(false);
