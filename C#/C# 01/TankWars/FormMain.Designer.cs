@@ -30,6 +30,7 @@
         {
             this.pnMap = new System.Windows.Forms.Panel();
             this.pnBottom = new System.Windows.Forms.Panel();
+            this.btStat = new System.Windows.Forms.Button();
             this.btPause = new System.Windows.Forms.Button();
             this.lbTanks = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,7 +41,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnHelp = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            this.btStat = new System.Windows.Forms.Button();
             this.pnBottom.SuspendLayout();
             this.pnHelp.SuspendLayout();
             this.SuspendLayout();
@@ -70,6 +70,17 @@
             this.pnBottom.Size = new System.Drawing.Size(513, 31);
             this.pnBottom.TabIndex = 1;
             // 
+            // btStat
+            // 
+            this.btStat.Location = new System.Drawing.Point(165, 3);
+            this.btStat.Name = "btStat";
+            this.btStat.Size = new System.Drawing.Size(75, 23);
+            this.btStat.TabIndex = 9;
+            this.btStat.TabStop = false;
+            this.btStat.Text = "Statistics";
+            this.btStat.UseVisualStyleBackColor = true;
+            this.btStat.Click += new System.EventHandler(this.btStat_Click);
+            // 
             // btPause
             // 
             this.btPause.Location = new System.Drawing.Point(84, 3);
@@ -80,7 +91,6 @@
             this.btPause.Text = "Pause";
             this.btPause.UseVisualStyleBackColor = true;
             this.btPause.Click += new System.EventHandler(this.btPause_Click);
-            this.btPause.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.bt_PreviewKeyDown);
             // 
             // lbTanks
             // 
@@ -110,7 +120,6 @@
             this.btNewGame.Text = "New Game";
             this.btNewGame.UseVisualStyleBackColor = true;
             this.btNewGame.Click += new System.EventHandler(this.btNewGame_Click);
-            this.btNewGame.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.bt_PreviewKeyDown);
             // 
             // lbApples
             // 
@@ -166,18 +175,6 @@
             this.label4.Size = new System.Drawing.Size(308, 13);
             this.label4.TabIndex = 2;
             this.label4.Text = "<Arrows> - Change direction. <Space> - Fire. <F2> - New game.";
-            // 
-            // btStat
-            // 
-            this.btStat.Location = new System.Drawing.Point(165, 3);
-            this.btStat.Name = "btStat";
-            this.btStat.Size = new System.Drawing.Size(75, 23);
-            this.btStat.TabIndex = 9;
-            this.btStat.TabStop = false;
-            this.btStat.Text = "Statistics";
-            this.btStat.UseVisualStyleBackColor = true;
-            this.btStat.Click += new System.EventHandler(this.btStat_Click);
-            this.btStat.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.bt_PreviewKeyDown);
             // 
             // FormMain
             // 

@@ -52,6 +52,7 @@
             this.dgvStat.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvStat.Size = new System.Drawing.Size(206, 238);
             this.dgvStat.TabIndex = 0;
+            this.dgvStat.TabStop = false;
             // 
             // ColumnObject
             // 

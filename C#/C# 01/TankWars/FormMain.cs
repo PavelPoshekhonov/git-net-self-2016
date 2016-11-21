@@ -7,7 +7,7 @@ namespace TankWars
     public partial class FormMain : Form
     {
         public PackmanController GameController;
-        FormStat frm = new FormStat(); // Окно статистики
+        FormStat frm; // Окно статистики
 
         public FormMain(string[] args)
         {
@@ -117,22 +117,16 @@ namespace TankWars
         private void btStat_Click(object sender, EventArgs e)
         {
             pnMap.Select(); // Убираем фокус с кнопки
-            frm.FormInit(GameController);
-            frm.Show();
-        }
 
-        // Для проталкивания событий нажатия на кнопки-стрелки
-        private void bt_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            switch (e.KeyCode)
+            if ((frm == null) || (frm.IsDisposed == true))
             {
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Up:
-                case Keys.Down:
-                    e.IsInputKey = true;
-                    break;
+                frm = new FormStat(); // Создать окно
+                frm.FormInit(GameController);
             }
+            frm.Show();
+
+            Activate();// Вернуться на главную форму
+            pnMap.Select(); // Убираем фокус с кнопки
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -140,6 +134,5 @@ namespace TankWars
             KeyDown -= GameController.KeyDown; // Обработчик события нажатия на кнопку
             GameController.Dispose();
         }
-
     }
 }

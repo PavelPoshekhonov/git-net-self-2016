@@ -23,9 +23,9 @@ namespace TankWars
         List<Bullet> bulletList = new List<Bullet>();
 
         public Kolobok KolobokObject{ get {return kolobokObject; } }
-        List<Apple> AppleList { get {return appleList; } }
-        List<Tank> TankList { get { return tankList; } }
-        List<Bullet> BulletList { get { return bulletList; } }
+        public List<Apple> AppleList { get {return appleList; } }
+        public List<Tank> TankList { get { return tankList; } }
+        public List<Bullet> BulletList { get { return bulletList; } }
 
         // Отображение игровых объектов
         KolobokView kolobokViewer;
@@ -69,6 +69,10 @@ namespace TankWars
             {
                 // Создаем пули (неактивные)
                 bulletList.Add(new Bullet(new Point(0, 0), ObjectSize.BulletH));
+                if (i == 0)
+                    bulletList[i].Name = "Пуля колобка";
+                else
+                    bulletList[i].Name = "Пуля танка " + i.ToString();
                 // Создаем отображение пули
                 bulletViewer.Add(new BulletView(canvas));
                 // Назначаем обработчики событий "Изменение положения", "Изменение направления", "Изменение активности"
@@ -81,6 +85,7 @@ namespace TankWars
             {
                 // Создаем танки
                 tankList.Add(new Tank(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize, (Direction)rnd.Next(4)));
+                tankList[i].Name = "Танк " + (i + 1).ToString();
                 // Создаем отображение танка
                 tankViewer.Add(new TankView(canvas));
                 // Назначаем обработчики событий "Изменение положения", "Изменение направления"
@@ -90,6 +95,7 @@ namespace TankWars
 
             // Создаем колобка
             kolobokObject = new Kolobok(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize, Direction.Top);
+            kolobokObject.Name = "Колобок";
             // Создаем отображение колобка
             kolobokViewer = new KolobokView(canvas, lbLf, lbAp, lbTn);
             // Назначаем обработчики событий "Изменение положения", "Изменение направления"
@@ -104,6 +110,7 @@ namespace TankWars
             {
                 // Создаем яблоки
                 appleList.Add(new Apple(GetRandomLocation(ObjectSize.CommonSize), ObjectSize.CommonSize));
+                appleList[i].Name = "Яблоко " + (i + 1).ToString();
                 // Создаем отображение яблока
                 appleViewer.Add(new AppleView(canvas));
                 // Назначаем обработчик события "Изменение положения"

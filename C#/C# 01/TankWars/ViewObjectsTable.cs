@@ -11,8 +11,8 @@ namespace TankWars
 
     public class GameObjectViewTable
     {
-        DataGridView grid;  // Грид
-        int row;            // Строка, в которую надо отображать
+        protected DataGridView grid;  // Грид
+        protected int row;            // Строка, в которую надо отображать
 
         // Конструктор
         public GameObjectViewTable(DataGridView grd)
@@ -21,19 +21,19 @@ namespace TankWars
         }
 
         // Установить обработчик события "Изменение положения"
-        public void SetLocationChangedHandler(GameObject obj, int rw)
+        public virtual void SetEventHandlers(GameObject obj, int rw)
         {
             row = rw;
 
-            // !!! Записать имя в грид
-            grid.Rows[row].Cells[0].Value = "";
+            // Записать имя в грид
+            grid.Rows[row].Cells[0].Value = obj.Name;
 
             obj.LocationChanged += ObjectLocationChanged;
             ObjectLocationChanged(obj, EventArgs.Empty); // Принудительное обновление
         }
 
         // Очистить обработчик события "Изменение положения"
-        public void UnSetLocationChangedHandler(GameObject obj)
+        public virtual void UnSetEventHandlers(GameObject obj)
         {
             obj.LocationChanged -= ObjectLocationChanged;
         }
@@ -42,7 +42,43 @@ namespace TankWars
         public void ObjectLocationChanged(object sender, EventArgs e)
         {
             if ((sender is GameObject) == false) return;
-            // !!! Записать координаты в грид
+            grid.Rows[row].Cells[1].Value = (sender as GameObject).Location.ToString();
+        }
+    }
+
+    public class BulletViewTable : GameObjectViewTable
+    {
+        // Конструктор
+        public BulletViewTable(DataGridView grd) : base(grd) { }
+
+        // Установить обработчик события "Изменение активности"
+        public override void SetEventHandlers(GameObject obj, int rw)
+        {
+            base.SetEventHandlers(obj, rw);
+
+            if ((obj is Bullet) == false) return;
+
+            (obj as Bullet).ActiveChanged += BulletActiveChanged;
+            BulletActiveChanged(obj, EventArgs.Empty); // Принудительное обновление
+        }
+
+        // Очистить обработчик события "Изменение активности"
+        public override void UnSetEventHandlers(GameObject obj)
+        {
+            base.UnSetEventHandlers(obj);
+
+            if ((obj is Bullet) == false) return;
+
+            (obj as Bullet).ActiveChanged -= BulletActiveChanged;
+        }
+
+        // Обработчик события "Изменение активности"
+        public void BulletActiveChanged(object sender, EventArgs e)
+        {
+            if ((sender is Bullet) == false) return;
+
+            if ((sender as Bullet).Active == false)
+                grid.Rows[row].Cells[1].Value = "Пуля не активна";
         }
     }
 }
