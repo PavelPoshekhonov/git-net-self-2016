@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace TankWars
+namespace TankWars.MVC.Model
 {
     // Базовый класс карт игры
     class GameMap

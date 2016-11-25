@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using TankWars.MVC.Model;
+using TankWars.MVC.View;
+using TankWars.MVC.Controller;
 
 namespace TankWars
 {

@@ -6,10 +6,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using TankWars.MVC.Model;
 
-namespace TankWars
+namespace TankWars.MVC.View
 {
-    class ViewMap
+    class MapView
     {
         public List<WallView> WallViewList = new List<WallView>();  // Массив стен
 

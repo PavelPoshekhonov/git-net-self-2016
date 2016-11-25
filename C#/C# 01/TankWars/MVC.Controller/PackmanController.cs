@@ -7,14 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using TankWars.MVC.Model;
+using TankWars.MVC.View;
 
-namespace TankWars
+namespace TankWars.MVC.Controller
 {
     public class PackmanController : IDisposable
     {
         // Игровая карта
         GameMap gameMap;
-        ViewMap viewMap;
+        MapView mapView;
 
         // Игровые объекты
         Kolobok kolobokObject;
@@ -62,8 +64,8 @@ namespace TankWars
             // Создаем карту
             gameMap = new GameMap01(canvas.Size);
             // Создаем отображение карты
-            viewMap = new ViewMap();
-            viewMap.ShowMap(canvas, gameMap);
+            mapView = new MapView();
+            mapView.ShowMap(canvas, gameMap);
 
             for (int i = 0; i <= tankAmount; i++) // Пуль столько же, сколько и танков + 1 (от колобка)
             {
@@ -166,7 +168,7 @@ namespace TankWars
             kolobokViewer.UnSetEventHandlers(kolobokObject);
             kolobokObject.LifesLeftChanged -= KolobokLifesLeftChanged;
 
-            viewMap.CloseMap(gameMap);
+            mapView.CloseMap(gameMap);
         }
 
         // Подготовить новую игру (для уже созданных объектов)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TankWars.MVC.Controller;
 
 namespace TankWars
 {
@@ -47,7 +48,7 @@ namespace TankWars
                 appleAmount = Math.Min(appleAmount, 20);
             }
 
-            if (args.Length >= 3)   // Скорость передвижения объектов (задается для всех объектов сразу)
+            if (args.Length >= 4)   // Скорость передвижения объектов (задается для всех объектов сразу)
             {
                 int speed;
                 int.TryParse(args[3], out speed);
