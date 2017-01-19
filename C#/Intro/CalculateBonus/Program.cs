@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CalculateBonus
 {
-    // Константы для вычисления налога с премии
+    ///<summary>Константы для вычисления налога с премии</summary>
     public static class TaxConstants
     {
         public static readonly decimal TaxBound = 10;
         public static readonly int TaxRateValue = 13;
     }
 
-    // Отделы
+    ///<summary>Отделы</summary>
     public enum Departments : int
     {
         RD = 0,         // Отдел разработок
@@ -23,7 +19,7 @@ namespace CalculateBonus
         Marketing = 4   // Отдел маркетинга
     }
 
-    // Должности
+    ///<summary>Должности</summary>
     public enum Ranks : int
     {
         Employee = 0,   // Сотрудник
@@ -32,7 +28,7 @@ namespace CalculateBonus
         Director = 3    // Директор
     }
 
-    // Класс Работник
+    ///<summary>Класс Работник</summary>
     public class Worker
     {
         string surName;
@@ -81,9 +77,15 @@ namespace CalculateBonus
         public bool TaxTaken                            // Признак снятия налога
         {
             get { return taxTaken; }
-        }                   
+        }
 
-        // Конструктор
+        ///<summary>Конструктор</summary>
+        ///<param name="sn">Фамилия</param>
+        ///<param name="rk">Должность</param>
+        ///<param name="dp">Отдел</param>
+        ///<param name="sl">Зарплата</param>
+        ///<param name="sp">Salary Procent</param>
+        ///<param name="kf">Koef</param>
         public Worker(string sn, Ranks rk, Departments dp, int sl, byte sp, double kf)
         {
             // Фамилия, Должность, Отдел
@@ -98,14 +100,15 @@ namespace CalculateBonus
             CalculateBonus();
         }
 
-        // Функция вычисления премии
+        ///<summary>Функция вычисления премии.</summary>
         void CalculateBonus()
         {
             bonus = (decimal)Salary * SalaryProcent / 100M  * (decimal)Koef;
             taxTaken = PayTax(ref bonus, out taxRate);
         }
 
-        // Функция списания налога с премии
+        ///<summary>Функция списания налога с премии.</summary>
+        ///<returns>Признак был ли списан налог.</returns>
         bool PayTax(ref decimal bn, out int tr)
         {
             tr = TaxConstants.TaxRateValue;
@@ -117,8 +120,8 @@ namespace CalculateBonus
             else
                 return false;
         }
-        
-        // Функция форматированного вывода
+
+        ///<summary>Функция форматированного вывода. Использует <seealso cref="System.Console.WriteLine()"/>.</summary>
         public void FormatWrite()
         {
             Console.WriteLine("Сотрудник: {0}", SurName);
@@ -135,7 +138,7 @@ namespace CalculateBonus
 
     class Program
     {
-        // Возвращаемые значения
+        ///<summary>Возвращаемые значения</summary>
         public enum ReturnCodes : int {
             AllOK = 0,      // Премия успешно начислена
             NoArg = -1,     // Не был передан обязательный (0й) аргумент
@@ -143,6 +146,8 @@ namespace CalculateBonus
             WrongRank = -3  // Указанная должность не существует
         }
 
+        ///<summary>Точка входа в программу.</summary>
+        ///<returns>Возвращает код <seealso cref="CalculateBonus.Program.ReturnCodes"/></returns>
         static int Main(string[] args)
         {
             string surName = "";
