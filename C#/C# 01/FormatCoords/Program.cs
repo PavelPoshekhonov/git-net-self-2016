@@ -11,19 +11,46 @@ namespace FormatCoords
     /// <summary>Представляет пару координат x и y в двухмерном пространстве (на плоскости).</summary>
     public struct Point
     {
-        public decimal X { get; set; }
-        public decimal Y { get; set; }
+        int separatorPosX;
+        public int SeparatorPosX { get { return separatorPosX; } }
+
+        int separatorPosY;
+        public int SeparatorPosY { get { return separatorPosY; } }
+
+        decimal x;
+        public decimal X
+        {
+            get { return x; }
+            set
+            {
+                x = value;
+                char decimalSeparator = Convert.ToChar(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
+                separatorPosX = (x.ToString().IndexOf(decimalSeparator) == -1) ? x.ToString().Length : x.ToString().IndexOf(decimalSeparator);
+            }
+        }
+
+        decimal y;
+        public decimal Y
+        {
+            get { return y; }
+            set
+            {
+                y = value;
+                char decimalSeparator = Convert.ToChar(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
+                separatorPosY = (y.ToString().IndexOf(decimalSeparator) == -1) ? y.ToString().Length : y.ToString().IndexOf(decimalSeparator);
+            }
+        }
     }
 
     /// <summary>Предназначен для хранения и форматированного вывода списка координат <see cref="Point"/>.</summary>
     public class CoordSet
     {
-        public string Sourse { get; }
-        List<Point> coords = new List<Point>();
+        public string Sourse { get; }               // Имя источника списка координат (Консоль / Файл)
+        List<Point> coords = new List<Point>();     // Список координат
 
-        int maxXpre = 0;
-        int maxXpost = 0;
-        int maxYpre = 0;
+        int maxXinteger = 0;                        // Максимальная целая часть X
+        int maxXfract = 0;                          // Максимальная дробная часть X
+        int maxYinteger = 0;                        // Максимальная целая часть Y
 
         /// <summary>Конструктор.</summary>
         /// <param name="sourse">Имя источника списка координат (Консоль / Файл).</param>
@@ -37,39 +64,53 @@ namespace FormatCoords
         public void Add(string coordStr)
         {
             string[] strXY;
-            decimal x;
-            decimal y;
+            char decimalSeparator;
             Point newPoint = new Point();
-            string tempStr;
 
+            // Разделить x, y
             strXY = coordStr.Split(',');
             if (strXY.Length != 2)
+            {
                 return;
+            }
 
-            // Разделитель десятичных разрядов
-            char DecSep = Convert.ToChar(System.Globalization.NumberFormatInfo.CurrentInfo.CurrencyDecimalSeparator);
-            tempStr = strXY[0].Replace('.', DecSep).Replace(',', DecSep);
-            decimal.TryParse(tempStr, out x);
+            decimalSeparator = Convert.ToChar(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
+            strXY[0] = strXY[0].Replace('.', decimalSeparator).Replace(',', decimalSeparator).Trim();
+            strXY[1] = strXY[1].Replace('.', decimalSeparator).Replace(',', decimalSeparator).Trim();
 
-            tempStr = strXY[1].Replace('.', DecSep).Replace(',', DecSep);
-            decimal.TryParse(tempStr, out y);
+            try
+            {
+                // Преобразовать из string в decimal
+                newPoint.X = decimal.Parse(strXY[0]);
+                newPoint.Y = decimal.Parse(strXY[1]);
 
-            newPoint.X = x;
-            newPoint.Y = y;
+                // Добавляем точку x,y в список
+                coords.Add(newPoint);
 
-            maxXpre  = Math.Max(maxXpre,  strXY[0].IndexOf(DecSep));
-            maxXpost = Math.Max(maxXpost, strXY[0].Length - strXY[0].IndexOf(DecSep) - 1);
-            maxYpre  = Math.Max(maxXpre,  strXY[1].IndexOf(DecSep));
-
-            coords.Add(newPoint);
+                // Поиск самых длинных целых и дробных частей
+                maxXinteger = Math.Max(maxXinteger, newPoint.SeparatorPosX);
+                maxXfract   = Math.Max(maxXfract,   newPoint.X.ToString().Length - newPoint.SeparatorPosX - 1);
+                maxYinteger = Math.Max(maxYinteger, newPoint.SeparatorPosY);
+            }
+            catch (FormatException)
+            {
+                return;
+            }
         }
 
         /// <summary>Производит форматированный вывод списка координат.</summary>
         public void MakeOutput()
         {
+            string strX, strY;
+
             foreach (Point crd in coords)
             {
-                Console.WriteLine(string.Format("X: {0:#######.#######} Y: {1:#######.#######}", crd.X, crd.Y));
+                strX = ("").PadRight(maxXinteger - crd.SeparatorPosX) + crd.X.ToString() +
+                       ("").PadRight(maxXfract - (crd.X.ToString().Length - crd.SeparatorPosX - 1));
+
+                strY = ("").PadRight(maxYinteger - crd.SeparatorPosY) + crd.Y.ToString();
+
+                Console.WriteLine("X: {0} Y: {1}" , strX, strY);
             }
         }
     }
@@ -143,6 +184,7 @@ namespace FormatCoords
             {
                 Console.WriteLine(cs.Sourse);
                 cs.MakeOutput();
+                Console.WriteLine("");
             }
 
             Console.WriteLine("");
