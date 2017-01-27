@@ -20,7 +20,7 @@ namespace FormatCoords
             if (args.Length == 0)
             {
                 // Ввод с консоли
-                Console.Out.WriteLine("FormatCoords. Запуск без аргументов. Чтение с консоли.");
+                Console.WriteLine("FormatCoords. Запуск без аргументов. Чтение с консоли.");
                 Console.WriteLine("Для завершения ввода введите пустую строку.");
                 Console.WriteLine("");
                 coordSet.Add(MakeConsoleInput());
