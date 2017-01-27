@@ -20,7 +20,7 @@ namespace FormatCoords
             if (args.Length == 0)
             {
                 // Ввод с консоли
-                Console.WriteLine("FormatCoords. Запуск без аргументов. Чтение с консоли.");
+                Console.Out.WriteLine("FormatCoords. Запуск без аргументов. Чтение с консоли.");
                 Console.WriteLine("Для завершения ввода введите пустую строку.");
                 Console.WriteLine("");
                 coordSet.Add(MakeConsoleInput());
@@ -51,18 +51,27 @@ namespace FormatCoords
         /// <returns>Экземпляр <see cref="CoordSet"/>.</returns>
         static CoordSet MakeConsoleInput()
         {
-            string strLine;
+            string strLine = "";
             CoordSet cs = new CoordSet("Ввод с консоли");
 
-            do
+            try
             {
-                strLine = Console.ReadLine();
-                if (strLine != "")
+                do
                 {
+                    strLine = Console.ReadLine();
+                    // null возникает с перенаправленным вводом из файла
+                    if (strLine == null)
+                    {
+                        strLine = "";
+                    }
                     cs.Add(strLine);
                 }
+                while (strLine != "");
             }
-            while (strLine != "");
+            catch
+            {
+                Console.WriteLine(String.Format("Ошибка при чтении. Последняя прочитанная строка: '{0}'"), strLine);
+            }
 
             return cs;
         }
@@ -71,16 +80,25 @@ namespace FormatCoords
         /// <returns>Массив списков координат <see cref="CoordSet"/>.</returns>
         static List<CoordSet> MakeFileInput(string[] args)
         {
+            StreamReader sr;
             List<CoordSet> csl = new List<CoordSet>();
 
             for (int i = 0; i < args.Length; i++)
             {
-                StreamReader sr = new StreamReader(args[i]);
-                csl.Add(new CoordSet("Данные из файла " + args[i]));
-
-                while (sr.EndOfStream == false)
+                if (!File.Exists(args[i]))
                 {
-                    csl[i].Add(sr.ReadLine());
+                    Console.WriteLine(String.Format("Файл {0} не существует.", args[i]));
+                }
+                else
+                {
+                    sr = new StreamReader(args[i]);
+                    csl.Add(new CoordSet("Данные из файла " + args[i]));
+
+                    while (sr.EndOfStream == false)
+                    {
+                        csl[i].Add(sr.ReadLine());
+                    }
+                    sr.Close();
                 }
             }
 
