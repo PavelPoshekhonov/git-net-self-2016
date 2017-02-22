@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FormatCoords</name>
+    </assembly>
+    <members>
+        <member name="T:FormatCoords.CoordSet">
+            <summary>Предназначен для хранения и форматированного вывода списка координат <see cref="T:FormatCoords.Point"/>.</summary>
+        </member>
+        <member name="M:FormatCoords.CoordSet.#ctor(System.String)">
+            <summary>Конструктор.</summary>
+            <param name="sourse">Имя источника списка координат (Консоль / Файл).</param>
+        </member>
+        <member name="M:FormatCoords.CoordSet.Add(System.String)">
+            <summary>Добавляет координату в список координат.</summary>
+            <param name="coordStr">Строка, содержащая пару координат x и y.</param>
+        </member>
+        <member name="M:FormatCoords.CoordSet.MakeOutput">
+            <summary>Производит форматированный вывод списка координат.</summary>
+        </member>
+        <member name="T:FormatCoords.Point">
+            <summary>Представляет пару координат x и y в двухмерном пространстве (на плоскости).</summary>
+        </member>
+        <member name="T:FormatCoords.Program">
+            <summary>Консольное приложение для чтения, форматирования и отображения чисел, представляющих x,y координаты положения объекста.</summary>
+        </member>
+        <member name="M:FormatCoords.Program.MakeConsoleInput">
+            <summary>Обеспечивает ввод координат пользователем с консоли.</summary>
+            <returns>Экземпляр <see cref="T:FormatCoords.CoordSet"/>.</returns>
+        </member>
+        <member name="M:FormatCoords.Program.MakeFileInput(System.String[])">
+            <summary>Обеспечивает ввод координат из текстовых файлов.</summary>
+            <returns>Массив списков координат <see cref="T:FormatCoords.CoordSet"/>.</returns>
+        </member>
+    </members>
+</doc>
