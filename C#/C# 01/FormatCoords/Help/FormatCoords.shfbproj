@@ -32,6 +32,9 @@
     <NamingMethod>Guid</NamingMethod>
     <HelpTitle>A FormatCoords Documented Class Library</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="FormatCoords" isDocumented="True" xmlns="">Набор средств для чтения, форматирования и отображения чисел, представляющих x,y координаты положения объекста.</NamespaceSummaryItem></NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->

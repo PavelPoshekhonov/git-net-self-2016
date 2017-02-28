@@ -7,8 +7,11 @@
         <member name="T:FormatCoords.CoordSet">
             <summary>Предназначен для хранения и форматированного вывода списка координат <see cref="T:FormatCoords.Point"/>.</summary>
         </member>
+        <member name="P:FormatCoords.CoordSet.Sourse">
+            <summary>Имя источника списка координат (Консоль / Файл).</summary>
+        </member>
         <member name="M:FormatCoords.CoordSet.#ctor(System.String)">
-            <summary>Конструктор.</summary>
+            <summary>Инициализирует новый экземпляр класса CoordSet.</summary>
             <param name="sourse">Имя источника списка координат (Консоль / Файл).</param>
         </member>
         <member name="M:FormatCoords.CoordSet.Add(System.String)">
@@ -19,7 +22,20 @@
             <summary>Производит форматированный вывод списка координат.</summary>
         </member>
         <member name="T:FormatCoords.Point">
-            <summary>Представляет пару координат x и y в двухмерном пространстве (на плоскости).</summary>
+            <summary>Представляет пару координат x и y в двухмерном пространстве (на плоскости).
+            Кроме того, хранит индексы десятичных разделителей чисел x и y.</summary>
+        </member>
+        <member name="P:FormatCoords.Point.SeparatorPosX">
+            <summary>Индекс десятичного разделителя в X.</summary>
+        </member>
+        <member name="P:FormatCoords.Point.SeparatorPosY">
+            <summary>Индекс десятичного разделителя в Y.</summary>
+        </member>
+        <member name="P:FormatCoords.Point.X">
+            <summary>Возвращает или задает X-координату структуры.</summary>
+        </member>
+        <member name="P:FormatCoords.Point.Y">
+            <summary>Возвращает или задает Y-координату структуры.</summary>
         </member>
         <member name="T:FormatCoords.Program">
             <summary>Консольное приложение для чтения, форматирования и отображения чисел, представляющих x,y координаты положения объекста.</summary>

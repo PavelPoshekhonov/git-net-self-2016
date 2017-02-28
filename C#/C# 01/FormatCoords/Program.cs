@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+/// <summary>Набор средств для чтения, форматирования и отображения чисел, представляющих x,y координаты положения объекста.</summary>
 namespace FormatCoords
 {
     /// <summary>Консольное приложение для чтения, форматирования и отображения чисел, представляющих x,y координаты положения объекста.</summary>

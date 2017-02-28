@@ -6,6 +6,7 @@ namespace FormatCoords
     /// <summary>Предназначен для хранения и форматированного вывода списка координат <see cref="Point"/>.</summary>
     public class CoordSet
     {
+        /// <summary>Имя источника списка координат (Консоль / Файл).</summary>
         public string Sourse { get; }               // Имя источника списка координат (Консоль / Файл)
         List<Point> coords = new List<Point>();     // Список координат
 
@@ -13,7 +14,7 @@ namespace FormatCoords
         int maxXfract = 0;                          // Максимальная дробная часть X
         int maxYinteger = 0;                        // Максимальная целая часть Y
 
-        /// <summary>Конструктор.</summary>
+        /// <summary>Инициализирует новый экземпляр класса CoordSet.</summary>
         /// <param name="sourse">Имя источника списка координат (Консоль / Файл).</param>
         public CoordSet(string sourse)
         {
@@ -28,7 +29,7 @@ namespace FormatCoords
             char decimalSeparator;
             Point newPoint = new Point();
 
-            // Разделить x, y
+            // Разделить x от y
             strXY = coordStr.Split(',');
             if (strXY.Length != 2)
             {
@@ -47,11 +48,6 @@ namespace FormatCoords
 
                 // Добавляем точку x,y в список
                 coords.Add(newPoint);
-
-                // Поиск самых длинных целых и дробных частей
-                maxXinteger = Math.Max(maxXinteger, newPoint.SeparatorPosX);
-                maxXfract = Math.Max(maxXfract, newPoint.X.ToString().Length - newPoint.SeparatorPosX - 1);
-                maxYinteger = Math.Max(maxYinteger, newPoint.SeparatorPosY);
             }
             catch (FormatException)
             {
@@ -59,10 +55,24 @@ namespace FormatCoords
             }
         }
 
+        // Поиск самых длинных целых и дробных частей
+        void FindLondestIntAndFracParts()
+        {
+            foreach (Point crd in coords)
+            {
+                maxXinteger = Math.Max(maxXinteger, crd.SeparatorPosX);
+                maxXfract = Math.Max(maxXfract, crd.X.ToString().Length - crd.SeparatorPosX - 1);
+                maxYinteger = Math.Max(maxYinteger, crd.SeparatorPosY);
+            }
+            return;
+        }
+
         /// <summary>Производит форматированный вывод списка координат.</summary>
         public void MakeOutput()
         {
             string strX, strY;
+
+            FindLondestIntAndFracParts();
 
             foreach (Point crd in coords)
             {
